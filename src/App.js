@@ -1,22 +1,17 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import Piece from './components/game/Piece';
+import PieceType from './components/game/PieceType';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Piece type={PieceType.STRIANGLE}/>
+        <Piece type={PieceType.MTRIANGLE}/>
+        <Piece type={PieceType.LTRIANGLE}/>
+        <Piece type={PieceType.SQUARE}/>
+        <Piece type={PieceType.PARALLELOGRAM}/>
       </header>
     </div>
   );

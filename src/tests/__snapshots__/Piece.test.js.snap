@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Page component 1`] = `
+<div>
+  <img
+    alt=""
+    className="striangle"
+    src="./striangle.png"
+  />
+</div>
+`;
