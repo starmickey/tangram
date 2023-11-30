@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import "../../styles/pieceType.css";
 
-function Piece({ type, x, y }) {
+function Piece({
+  type, x, y, angle,
+}) {
   const { src, height, width } = type;
 
   const style = {
@@ -10,6 +12,7 @@ function Piece({ type, x, y }) {
     width: `${width}px`,
     left: `${x - width / 2}px`,
     top: `${y - height / 2}px`,
+    rotate: `${angle}deg`,
   };
 
   return (
@@ -32,11 +35,13 @@ Piece.propTypes = {
   }).isRequired,
   x: PropTypes.number,
   y: PropTypes.number,
+  angle: PropTypes.number,
 };
 
 Piece.defaultProps = {
   x: 500,
   y: 500,
+  angle: 0,
 };
 
 export default Piece;

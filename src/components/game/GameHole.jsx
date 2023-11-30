@@ -1,33 +1,19 @@
 import { useState } from "react";
 import Piece from "./Piece";
-import PieceType from "./PieceType";
+import piecesSet from "./PiecesSet";
 
 export default function GameHole() {
-  const [pieces, setPieces] = useState([
-    {
-      id: 0, type: PieceType.STRIANGLE, x: 100, y: 100,
-    },
-    {
-      id: 1, type: PieceType.STRIANGLE, x: 200, y: 100,
-    },
-    {
-      id: 2, type: PieceType.MTRIANGLE, x: 100, y: 200,
-    },
-    {
-      id: 3, type: PieceType.LTRIANGLE, x: 300, y: 300,
-    },
-    {
-      id: 4, type: PieceType.LTRIANGLE, x: 100, y: 600,
-    },
-    {
-      id: 5, type: PieceType.PARALLELOGRAM, x: 300, y: 600,
-    },
-    {
-      id: 6, type: PieceType.SQUARE, x: 450, y: 600,
-    },
-  ]);
-
+  const [pieces, setPieces] = useState(piecesSet);
   const [isDragging, setIsDragging] = useState(false);
+
+  const handleClick = (pieceId) => {
+    if (!isDragging) {
+      const updatedPieces = pieces.map((piece) => (piece.id === pieceId
+        ? { ...piece, angle: piece.angle + 45 }
+        : piece));
+      setPieces(updatedPieces);
+    }
+  };
 
   const handleDragStart = () => {
     setIsDragging(true);
@@ -55,6 +41,8 @@ export default function GameHole() {
       {pieces.map((piece) => (
         <div
           key={piece.id}
+          role="none"
+          onClick={(e) => handleClick(piece.id, e)}
           onDragEnd={(e) => handleDragEnd(piece.id, e)}
         >
           <Piece
@@ -62,6 +50,7 @@ export default function GameHole() {
             type={piece.type}
             x={piece.x}
             y={piece.y}
+            angle={piece.angle}
           />
         </div>
       ))}
