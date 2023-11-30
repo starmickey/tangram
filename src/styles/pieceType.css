@@ -1,19 +1,9 @@
-.striangle {
-    width: 5rem;
+.piece {
+  position: absolute;
 }
 
-.mtriangle {
-    width: 10rem;
+.piece:hover {
+  filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.1));
 }
 
-.ltriangle {
-    width: 20rem;
-}
 
-.square{
-    width: 20rem;
-}
-
-.parallelogram {
-    width: 20rem;
-}
