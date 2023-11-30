@@ -1,27 +1,27 @@
 const PieceType = {
   STRIANGLE: {
     id: 0,
-    src: "./striangle.png",
-    height: 50,
-    width: 100,
-  },
-  MTRIANGLE: {
-    id: 1,
-    src: "./mtriangle.png",
+    src: "./triangle.png",
     height: 70.71,
     width: 141.42,
   },
-  LTRIANGLE: {
-    id: 2,
-    src: "./ltriangle.png",
+  MTRIANGLE: {
+    id: 1,
+    src: "./triangle.png",
     height: 100,
     width: 200,
+  },
+  LTRIANGLE: {
+    id: 2,
+    src: "./triangle.png",
+    height: 141.42,
+    width: 282.84,
   },
   PARALLELOGRAM: {
     id: 3,
     src: "./parallelogram.png",
-    height: 50,
-    width: 150,
+    height: 70.71,
+    width: 212.13,
   },
   SQUARE: {
     id: 4,

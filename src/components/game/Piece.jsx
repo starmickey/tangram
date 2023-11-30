@@ -8,11 +8,11 @@ function Piece({
 
   const style = {
     cursor: "grab",
+    rotate: `${angle}deg`,
     height: `${height}px`,
     width: `${width}px`,
     left: `${x - width / 2}px`,
     top: `${y - height / 2}px`,
-    rotate: `${angle}deg`,
   };
 
   return (
