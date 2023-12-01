@@ -1,31 +1,14 @@
 import PieceType from "./PieceType";
+import PieceDTO from "./PieceDTO";
 
 const PiecesSet = [
-  {
-    id: 0,
-    type: PieceType.STRIANGLE,
-    x: 100,
-    y: 100,
-    angle: 0,
-  },
-  {
-    id: 1, type: PieceType.STRIANGLE, x: 200, y: 100, angle: 0,
-  },
-  {
-    id: 2, type: PieceType.MTRIANGLE, x: 100, y: 200, angle: 0,
-  },
-  {
-    id: 3, type: PieceType.LTRIANGLE, x: 300, y: 300, angle: 0,
-  },
-  {
-    id: 4, type: PieceType.LTRIANGLE, x: 100, y: 600, angle: 0,
-  },
-  {
-    id: 5, type: PieceType.PARALLELOGRAM, x: 300, y: 600, angle: 0,
-  },
-  {
-    id: 6, type: PieceType.SQUARE, x: 450, y: 600, angle: 0,
-  },
+  new PieceDTO(0, PieceType.STRIANGLE, 200, 200, 0),
+  new PieceDTO(1, PieceType.STRIANGLE, 200, 400, 0),
+  new PieceDTO(2, PieceType.SQUARE, 200, 600, 0),
+  new PieceDTO(3, PieceType.PARALLELOGRAM, 400, 200, 0),
+  new PieceDTO(4, PieceType.MTRIANGLE, 400, 400, 0),
+  new PieceDTO(5, PieceType.LTRIANGLE, 400, 700, 0),
+  new PieceDTO(6, PieceType.LTRIANGLE, 700, 700, 0),
 ];
 
 export default PiecesSet;
