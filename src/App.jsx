@@ -1,12 +1,12 @@
 // import logo from './logo.svg';
 import "./App.css";
-import GameHole from "./components/game/GameHole";
+import Game from "./components/game/Game";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <GameHole />
+        <Game />
       </header>
     </div>
   );

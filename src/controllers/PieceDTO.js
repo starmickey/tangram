@@ -1,4 +1,4 @@
-class PieceDTO {
+export default class PieceDTO {
   constructor(id, type, x = 0, y = 0, a = 0) {
     this.id = id;
     this.type = type;
@@ -18,5 +18,3 @@ class PieceDTO {
     return this;
   }
 }
-
-export default PieceDTO;

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import Piece from "./Piece";
-import piecesSet from "./PiecesSet";
+import piecesSet from "../../controllers/PiecesSet";
+import PieceHandler from "../../controllers/PieceHandler";
 
-export default function GameHole() {
-  const [pieces, setPieces] = useState(piecesSet);
+export default function Game() {
+  const pieceHandler = new PieceHandler(piecesSet);
+  const [pieces, setPieces] = useState(pieceHandler.getPiecesDTOs());
   const [isDragging, setIsDragging] = useState(false);
 
   const handleClick = (pieceId) => {
     if (!isDragging) {
-      const updatedPieces = pieces.map((piece) => (piece.id === pieceId
-        ? piece.setA(piece.a + 45)
-        : piece));
-      setPieces(updatedPieces);
+      pieceHandler.rotatePiece(pieceId, 45);
+      // rerender pieces
+      setPieces(pieceHandler.getPiecesDTOs());
     }
   };
 
@@ -21,16 +22,15 @@ export default function GameHole() {
 
   const handleDragEnd = (pieceId, e) => {
     if (isDragging) {
-      const updatedPieces = pieces.map((piece) => (piece.id === pieceId
-        ? piece.setPosition(e.clientX, e.clientY)
-        : piece));
-      setPieces(updatedPieces);
+      pieceHandler.movePiece(pieceId, e.clientX, e.clientY);
+      // rerender pieces
+      setPieces(pieceHandler.getPiecesDTOs());
     }
     setIsDragging(false);
   };
 
   document.addEventListener("dragover", (event) => {
-    // prevent default to allow drop
+    // allow drop
     event.preventDefault();
   }, false);
 

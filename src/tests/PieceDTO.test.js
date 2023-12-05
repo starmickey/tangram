@@ -1,4 +1,4 @@
-import PieceDTO from "../components/game/PieceDTO";
+import PieceDTO from "../controllers/PieceDTO";
 
 describe("PieceDTO", () => {
   it("creates pieces even without positions", () => {
