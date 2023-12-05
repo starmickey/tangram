@@ -1,7 +1,10 @@
 export default class PieceDTO {
-  constructor(id, type, x = 0, y = 0, a = 0) {
+  constructor(id, typeId, src, height, width, x, y, a) {
     this.id = id;
-    this.type = type;
+    this.typeId = typeId;
+    this.src = src;
+    this.height = height;
+    this.width = width;
     this.x = x;
     this.y = y;
     this.a = a;
@@ -10,11 +13,9 @@ export default class PieceDTO {
   setPosition(x, y) {
     this.x = x;
     this.y = y;
-    return this;
   }
 
   setA(a) {
     this.a = a;
-    return this;
   }
 }

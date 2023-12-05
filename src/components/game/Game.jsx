@@ -1,12 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Piece from "./Piece";
 import piecesSet from "../../controllers/PiecesSet";
 import PieceHandler from "../../controllers/PieceHandler";
 
+function useDragAndDrop(pieceHandler, setPieces) {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = (pieceId, event) => {
+    if (isDragging) {
+      pieceHandler.movePiece(pieceId, event.clientX, event.clientY);
+      // rerender pieces
+      setPieces(pieceHandler.getPiecesDTOs());
+    }
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    const handleDragOver = (event) => {
+      event.preventDefault();
+    };
+
+    document.addEventListener("dragover", handleDragOver, false);
+
+    return () => {
+      document.removeEventListener("dragover", handleDragOver, false);
+    };
+  }, []); // Cleanup on unmount
+
+  return {
+    isDragging,
+    handleDragStart,
+    handleDragEnd,
+  };
+}
+
 export default function Game() {
   const pieceHandler = new PieceHandler(piecesSet);
   const [pieces, setPieces] = useState(pieceHandler.getPiecesDTOs());
-  const [isDragging, setIsDragging] = useState(false);
+  const { isDragging, handleDragStart, handleDragEnd } = useDragAndDrop(pieceHandler, setPieces);
 
   const handleClick = (pieceId) => {
     if (!isDragging) {
@@ -15,40 +50,17 @@ export default function Game() {
       setPieces(pieceHandler.getPiecesDTOs());
     }
   };
-
-  const handleDragStart = () => {
-    setIsDragging(true);
-  };
-
-  const handleDragEnd = (pieceId, e) => {
-    if (isDragging) {
-      pieceHandler.movePiece(pieceId, e.clientX, e.clientY);
-      // rerender pieces
-      setPieces(pieceHandler.getPiecesDTOs());
-    }
-    setIsDragging(false);
-  };
-
-  document.addEventListener("dragover", (event) => {
-    // allow drop
-    event.preventDefault();
-  }, false);
-
   return (
-    <div
-      onDragStart={handleDragStart}
-    >
+    <div>
       {pieces.map((piece) => (
         <div
           key={piece.id}
           role="none"
-          onClick={(e) => handleClick(piece.id, e)}
-          onDragEnd={(e) => handleDragEnd(piece.id, e)}
+          onDragStart={handleDragStart}
+          onClick={() => handleClick(piece.id)}
+          onDragEnd={(event) => handleDragEnd(piece.id, event)}
         >
-          <Piece
-            draggable
-            piece={piece}
-          />
+          <Piece draggable piece={piece} />
         </div>
       ))}
     </div>

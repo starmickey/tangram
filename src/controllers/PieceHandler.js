@@ -1,15 +1,26 @@
 import PieceDTO from "./PieceDTO";
-import { getTypeById } from "./PieceType";
+import Piece from "./Piece";
 
 export default class GameController {
   constructor(pieces) {
-    this.pieces = pieces;
+    this.pieces = [];
+    // Type validation
+    pieces.forEach((piece) => {
+      if (piece instanceof Piece) {
+        this.pieces.push(piece);
+      } else {
+        throw new Error("Invalid Parameters");
+      }
+    });
   }
 
   getPiecesDTOs() {
     return this.pieces.map((piece) => new PieceDTO(
       piece.id,
-      getTypeById(piece.typeId),
+      piece.type.id,
+      piece.type.src,
+      piece.type.height,
+      piece.type.width,
       piece.x,
       piece.y,
       piece.a,
@@ -17,14 +28,18 @@ export default class GameController {
   }
 
   movePiece(pieceId, x, y) {
-    this.pieces = this.pieces.map((piece) => (piece.id === pieceId
-      ? piece.setPosition(x, y)
-      : piece));
+    this.pieces.forEach((piece) => {
+      if (piece.id === pieceId) {
+        piece.setPosition(x, y);
+      }
+    });
   }
 
   rotatePiece(pieceId, a) {
-    this.pieces = this.pieces.map((piece) => (piece.id === pieceId
-      ? piece.setA(piece.a + a)
-      : piece));
+    this.pieces.forEach((piece) => {
+      if (piece.id === pieceId) {
+        piece.setA(piece.a + a);
+      }
+    });
   }
 }
