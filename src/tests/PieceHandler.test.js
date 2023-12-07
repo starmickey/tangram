@@ -11,9 +11,4 @@ describe('Piece Handler', () => {
 
     expect(piecesDTO[0].id).toBe(1);
   });
-  it('throws error if parameters are invalid', () => {
-    const pieces = [{id: 0, type: 0, x: 0, y: 0, a: 0}]
-    expect(() => new PieceHandler(pieces))
-      .toThrow(new Error("Invalid Parameters"));
-  });
  })

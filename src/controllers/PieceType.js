@@ -31,21 +31,4 @@ const PieceType = {
   },
 };
 
-export const getTypeById = (id) => {
-  switch (id) {
-    case 0:
-      return PieceType.STRIANGLE;
-    case 1:
-      return PieceType.MTRIANGLE;
-    case 2:
-      return PieceType.LTRIANGLE;
-    case 3:
-      return PieceType.PARALLELOGRAM;
-    case 4:
-      return PieceType.SQUARE;
-    default:
-      return -1;
-  }
-};
-
 export default PieceType;
