@@ -14,17 +14,25 @@ export default class GameController {
     });
   }
 
-  getPiecesDTOs() {
-    return this.pieces.map((piece) => new PieceDTO(
-      piece.id,
-      piece.type.id,
-      piece.type.src,
-      piece.type.height,
-      piece.type.width,
-      piece.x,
-      piece.y,
-      piece.a,
-    ));
+  getPieceDTO(pieceId) {
+    let pieceDTO;
+
+    this.pieces.forEach((piece) => {
+      if (piece.id === pieceId) {
+        pieceDTO = new PieceDTO(
+          piece.id,
+          piece.type.id,
+          piece.type.src,
+          piece.type.height,
+          piece.type.width,
+          piece.x,
+          piece.y,
+          piece.a,
+        );
+      }
+    });
+
+    return pieceDTO;
   }
 
   movePiece(pieceId, x, y) {
