@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import PieceHandler from "../../controllers/PieceHandler";
-import "../../styles/pieceType.css";
+import GameHandler from "../controllers/GameHandler";
+import "../styles/pieceType.css";
 
-function useDragAndDrop(pieceId, setPiece, pieceHandler) {
+function useDragAndDrop(pieceId, setPiece, gameHandler, handleGameChange) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = () => {
@@ -12,11 +12,23 @@ function useDragAndDrop(pieceId, setPiece, pieceHandler) {
 
   const handleDragEnd = (event) => {
     if (isDragging) {
-      pieceHandler.movePiece(pieceId, event.clientX, event.clientY);
+      gameHandler.movePiece(pieceId, event.clientX, event.clientY);
       // rerender piece
-      setPiece(pieceHandler.getPieceDTO(pieceId));
+      setPiece(gameHandler.getPieceDTO(pieceId));
+      // check if game is done from parent component
+      handleGameChange();
     }
     setIsDragging(false);
+  };
+
+  const handleClick = () => {
+    if (!isDragging) {
+      gameHandler.rotatePiece(pieceId, 45);
+      // rerender piece
+      setPiece(gameHandler.getPieceDTO(pieceId));
+      // check if game is done from parent component
+      handleGameChange();
+    }
   };
 
   useEffect(() => {
@@ -32,28 +44,20 @@ function useDragAndDrop(pieceId, setPiece, pieceHandler) {
   }, []); // Cleanup on unmount
 
   return {
-    isDragging,
     handleDragStart,
     handleDragEnd,
+    handleClick,
   };
 }
 
-function Piece({ pieceId, pieceHandler }) {
-  const [piece, setPiece] = useState(pieceHandler.getPieceDTO(pieceId));
+function Piece({ pieceId, gameHandler, handleGameChange }) {
+  const [piece, setPiece] = useState(gameHandler.getPieceDTO(pieceId));
 
   const {
-    isDragging,
     handleDragStart,
     handleDragEnd,
-  } = useDragAndDrop(pieceId, setPiece, pieceHandler);
-
-  const handleClick = () => {
-    if (!isDragging) {
-      pieceHandler.rotatePiece(pieceId, 45);
-      // rerender piece
-      setPiece(pieceHandler.getPieceDTO(pieceId));
-    }
-  };
+    handleClick,
+  } = useDragAndDrop(pieceId, setPiece, gameHandler, handleGameChange);
 
   const style = {
     cursor: "grab",
@@ -81,7 +85,8 @@ function Piece({ pieceId, pieceHandler }) {
 
 Piece.propTypes = {
   pieceId: PropTypes.number.isRequired,
-  pieceHandler: PropTypes.instanceOf(PieceHandler).isRequired,
+  gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
+  handleGameChange: PropTypes.func.isRequired,
 };
 
 export default Piece;

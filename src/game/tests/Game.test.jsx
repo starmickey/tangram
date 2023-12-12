@@ -3,6 +3,8 @@ import Game from "../components/game/Game";
 
 describe('Game component', () => { 
   it('renders', () => {
-    render(<Game />);
+    function setState () {}
+
+    render(<Game setState={setState}/>);
   });
  })

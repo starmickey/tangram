@@ -1,7 +1,7 @@
 import PieceDTO from "./PieceDTO";
 import Piece from "./Piece";
 
-export default class GameController {
+export default class PieceHandler {
   constructor(pieces) {
     this.pieces = [];
     // Type validation
