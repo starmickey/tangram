@@ -35,18 +35,21 @@ export default class PieceHandler {
     return pieceDTO;
   }
 
-  movePiece(pieceId, x, y) {
+  movePiece(pieceId, diffX, diffY) {
     this.pieces.forEach((piece) => {
       if (piece.id === pieceId) {
-        piece.setPosition(x, y);
+        piece.setPosition(
+          piece.x + diffX,
+          piece.y + diffY,
+        );
       }
     });
   }
 
-  rotatePiece(pieceId, a) {
+  rotatePiece(pieceId, diffA) {
     this.pieces.forEach((piece) => {
       if (piece.id === pieceId) {
-        piece.setA(piece.a + a);
+        piece.setA(piece.a + diffA);
       }
     });
   }

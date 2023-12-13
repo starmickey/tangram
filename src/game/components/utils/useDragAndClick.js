@@ -3,34 +3,42 @@ import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
 
 function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
-  const [isDragging, setIsDragging] = useState(false);
-  // const [state, setState] = useState({
-  //   isDragging: false,
-  //   x: 0,
-  //   y: 0,
-  // });
+  // const [isDragging, setIsDragging] = useState(false);
+  const [state, setState] = useState({
+    isDragging: false,
+    x: 0,
+    y: 0,
+  });
 
-  const handleDragStart = () => {
-    setIsDragging(true);
-    // setState({
-    //   isDragging: true,
-    //   x: e.target.x()
-    // });
+  const handleDragStart = (e) => {
+    // setIsDragging(true);
+    setState({
+      isDragging: true,
+      x: e.clientX,
+      y: e.clientY,
+    });
   };
 
   const handleDragEnd = (event) => {
-    if (isDragging) {
-      gameHandler.movePiece(pieceId, event.clientX, event.clientY);
+    if (state.isDragging) {
+      const diffX = event.clientX - state.x;
+      const diffY = event.clientY - state.y;
+      gameHandler.movePiece(pieceId, diffX, diffY);
+
+      // gameHandler.movePiece(pieceId, event.clientX, event.clientY);
       // rerender piece
       setPiece(gameHandler.getPieceDTO(pieceId));
       // check if game is done from parent component
       handleGameChange();
     }
-    setIsDragging(false);
+    setState({
+      ...state,
+      isDragging: false,
+    });
   };
 
   const handleClick = () => {
-    if (!isDragging) {
+    if (!state.isDragging) {
       gameHandler.rotatePiece(pieceId, 45);
       // rerender piece
       setPiece(gameHandler.getPieceDTO(pieceId));
