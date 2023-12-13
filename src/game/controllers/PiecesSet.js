@@ -1,4 +1,4 @@
-import PieceType from "./PieceType";
+import PieceType from "../objects/enum/PieceType";
 import Piece from "./Piece";
 
 const PiecesSet = [

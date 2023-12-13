@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Game from "../components/Game";
 import WinPage from "./WinPage";
-import GameState from "../controllers/GameState";
+import GameState from "../objects/enum/GameState";
 
 export default function GamePage() {
   const [state, setState] = useState(GameState.GAME);

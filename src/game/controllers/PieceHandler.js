@@ -1,4 +1,4 @@
-import PieceDTO from "./PieceDTO";
+import PieceDTO from "../objects/dto/PieceDTO";
 import Piece from "./Piece";
 
 export default class PieceHandler {
