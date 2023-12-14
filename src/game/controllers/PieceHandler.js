@@ -35,12 +35,15 @@ export default class PieceHandler {
     return pieceDTO;
   }
 
-  movePiece(pieceId, diffX, diffY) {
+  // movePiece(pieceId, diffX, diffY) {
+  movePiece(pieceId, x, y) {
     this.pieces.forEach((piece) => {
       if (piece.id === pieceId) {
         piece.setPosition(
-          piece.x + diffX,
-          piece.y + diffY,
+          // piece.x + diffX,
+          // piece.y + diffY,
+          x,
+          y,
         );
       }
     });

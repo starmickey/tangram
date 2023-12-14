@@ -20,8 +20,8 @@ const PieceType = {
   PARALLELOGRAM: {
     id: 3,
     src: "./parallelogram.png",
-    height: 100,
-    width: 200,
+    height: 70.71,
+    width: 212.13,
   },
   SQUARE: {
     id: 4,

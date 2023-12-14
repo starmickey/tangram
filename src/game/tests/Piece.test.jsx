@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Piece from "../components/Piece";
 import GameHandler from "../controllers/GameHandler";
 import PieceHandler from "../controllers/PieceHandler";

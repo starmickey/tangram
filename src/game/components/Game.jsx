@@ -1,3 +1,4 @@
+import { Stage, Layer } from "react-konva";
 import PropTypes from "prop-types";
 import Piece from "./Piece";
 import GameHandler from "../controllers/GameHandler";
@@ -15,16 +16,18 @@ function Game({ state, setState }) {
   const piecesIds = gameHandler.getPiecesIds();
 
   return (
-    <div>
-      {piecesIds.map((pieceId) => (
-        <Piece
-          key={pieceId}
-          pieceId={pieceId}
-          gameHandler={gameHandler}
-          handleGameChange={handleGameChange}
-        />
-      ))}
-    </div>
+    <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Layer>
+        {piecesIds.map((pieceId) => (
+          <Piece
+            key={pieceId}
+            pieceId={pieceId}
+            gameHandler={gameHandler}
+            handleGameChange={handleGameChange}
+          />
+        ))}
+      </Layer>
+    </Stage>
   );
 }
 
