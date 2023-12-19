@@ -2,22 +2,17 @@ import PieceDTO from "../objects/dto/PieceDTO";
 import Piece from "./Piece";
 import { getPieceType } from "../objects/enum/PieceType";
 
-export default class PieceHandler {
+class PieceHandler {
   constructor(pieces) {
-    this.pieces = [];
-    // Type validation
-    pieces.forEach((piece) => {
-      if (piece instanceof PieceDTO) {
-        this.pieces.push(PieceHandler.#pieceDTOtoPiece(piece));
-      } else {
-        throw new Error("Invalid Parameters");
-      }
-    });
+    // Validate inputs
+    if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
+      throw new Error("piece inputs have invalid types");
+    }
+    this.pieces = pieces.map((piece) => PieceHandler.#pieceDTOtoPiece(piece));
   }
 
   static #pieceDTOtoPiece(pieceDTO) {
     return new Piece(
-      pieceDTO.id,
       getPieceType(pieceDTO.typeId),
       pieceDTO.x,
       pieceDTO.y,
@@ -41,7 +36,10 @@ export default class PieceHandler {
     const filteredPieces = this.pieces.filter((p) => (pieceId === p.id));
     const piece = filteredPieces[0];
     return PieceHandler.#pieceToPieceDTO(piece);
-    // return pieceDTO;
+  }
+
+  getPiecesDTOs() {
+    return this.pieces.map((piece) => PieceHandler.#pieceToPieceDTO(piece));
   }
 
   movePiece(pieceId, diffX, diffY) {
@@ -63,3 +61,5 @@ export default class PieceHandler {
     });
   }
 }
+
+export default PieceHandler;

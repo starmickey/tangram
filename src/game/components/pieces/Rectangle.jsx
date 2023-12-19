@@ -2,12 +2,20 @@ import { Rect } from "react-konva";
 import PropTypes from "prop-types";
 import PieceDTO from "../../objects/dto/PieceDTO";
 
+/**
+ * Renders a interactiv rectangle
+ * @param {PieceDTO} piece - actual piece status
+ * @param {bool} isDragging - react hook which keeps if the
+ * piece is being dragged
+ * @param {Object} handlers - package with event handlers
+ * @param {Object} styles - customizable shape styles
+ */
+
 function Rectangle({
   piece,
   isDragging,
-  handleDragStart,
-  handleDragEnd,
-  handleClick,
+  handlers,
+  styles,
 }) {
   return (
     <Rect
@@ -20,25 +28,43 @@ function Rectangle({
       height={piece.height}
       // events handling
       draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onClick={handleClick}
+      onDragStart={handlers.handleDragStart}
+      onDragEnd={handlers.handleDragEnd}
+      onClick={handlers.handleClick}
       // format
-      fill="#00D2FF"
-      stroke="#000000"
-      strokeWidth={0.1}
+      fill={styles.fill}
+      stroke={styles.stroke}
+      strokeWidth={styles.strokeWidth}
       // ensure it rotates around its center
       offsetX={piece.width / 2}
       offsetY={piece.height / 2}
-      // it moves to front on drag
-      // zIndex={isDragging ? 6 : 0}
       // shadow
-      shadowOffsetX={isDragging ? 1 : 0.5}
-      shadowOffsetY={isDragging ? 1 : 0.5}
-      shadowBlur={isDragging ? 5 : 3}
+      shadowOffsetX={
+        isDragging
+          ? styles.shadowOffset
+          : styles.shadowOffsetOnDrag
+      }
+      shadowOffsetY={
+        isDragging
+          ? styles.shadowOffset
+          : styles.shadowOffsetOnDrag
+      }
+      shadowBlur={
+        isDragging
+          ? styles.shadowBlur
+          : styles.shadowBlurOnDrag
+      }
       // scale on drag
-      scaleX={isDragging ? 1.05 : 1}
-      scaleY={isDragging ? 1.05 : 1}
+      scaleX={
+        isDragging
+          ? styles.scaleOnDrag
+          : 1
+      }
+      scaleY={
+        isDragging
+          ? styles.scaleOnDrag
+          : 1
+      }
     />
   );
 }
@@ -46,9 +72,21 @@ function Rectangle({
 Rectangle.propTypes = {
   piece: PropTypes.instanceOf(PieceDTO).isRequired,
   isDragging: PropTypes.bool.isRequired,
-  handleDragStart: PropTypes.func.isRequired,
-  handleDragEnd: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired,
+  handlers: PropTypes.shape({
+    handleDragStart: PropTypes.func.isRequired,
+    handleDragEnd: PropTypes.func.isRequired,
+    handleClick: PropTypes.func.isRequired,
+  }).isRequired,
+  styles: PropTypes.shape({
+    fill: PropTypes.string,
+    stroke: PropTypes.string,
+    strokeWidth: PropTypes.number,
+    shadowOffset: PropTypes.number,
+    shadowOffsetOnDrag: PropTypes.number,
+    shadowBlur: PropTypes.number,
+    shadowBlurOnDrag: PropTypes.number,
+    scaleOnDrag: PropTypes.number,
+  }).isRequired,
 };
 
 export default Rectangle;

@@ -1,15 +1,27 @@
 import PieceHandler from "./PieceHandler";
-// import piecesSet from "./PiecesSet";
-// import GameState from "./GameState";
+import PieceDTO from "../objects/dto/PieceDTO";
 
-export default class GameHandler {
+class GameHandler {
   constructor(pieces, state) {
+    // Validate inputs
+    if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
+      throw new Error("piece inputs have invalid types");
+    }
+    if (typeof state !== "number") {
+      throw new Error("game state has an invalid type");
+    }
+
+    // Assign non-static variables
     this.pieceHandler = new PieceHandler(pieces);
     this.state = state;
   }
 
   getPieceDTO(pieceId) {
     return this.pieceHandler.getPieceDTO(pieceId);
+  }
+
+  getPiecesDTOs() {
+    return this.pieceHandler.getPiecesDTOs();
   }
 
   movePiece(pieceId, x, y) {
@@ -28,3 +40,5 @@ export default class GameHandler {
     return this.pieceHandler.pieces.map((piece) => piece.id);
   }
 }
+
+export default GameHandler;

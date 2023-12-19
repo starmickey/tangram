@@ -1,22 +1,22 @@
 import PropTypes from "prop-types";
 import PlayingArea from "../../components/PlayingArea";
 
-function PlayingPage({ state, setState }) {
+function PlayingPage({ gameState, setGameState }) {
   return (
     <div className="playing-area-container">
       <PlayingArea
         pwidth={0.8}
         pheight={0.8}
-        state={state}
-        setState={setState}
+        gameState={gameState}
+        setGameState={setGameState}
       />
     </div>
   );
 }
 
 PlayingPage.propTypes = {
-  state: PropTypes.number.isRequired,
-  setState: PropTypes.func.isRequired,
+  gameState: PropTypes.number.isRequired,
+  setGameState: PropTypes.func.isRequired,
 };
 
 export default PlayingPage;

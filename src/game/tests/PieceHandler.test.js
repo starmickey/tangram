@@ -1,6 +1,5 @@
 import PieceHandler from "../controllers/PieceHandler";
 import PieceDTO from "../objects/dto/PieceDTO";
-import PieceType from "../objects/enum/PieceType"
 
 describe("Piece Handler", () => {
   it('creates a piece handler', () => {
@@ -16,12 +15,17 @@ describe("Piece Handler", () => {
     expect(handler).toBeDefined();
     expect(handler.pieces).toBeDefined();
     expect(handler.pieces.length).toBe(1);
-    expect(handler.pieces[0].id).toBe(piece.id);
 
-    const piece2 = handler.getPieceDTO(piece.id);
+    const pieceCreated = handler.pieces[0];
+    expect(pieceCreated).toBeDefined();
+    expect(pieceCreated.id).toBeGreaterThanOrEqual(0);
+    expect(pieceCreated.type.id).toBeDefined();
 
-    expect(piece.id).toBe(piece2.id);
-    expect(piece.typeId).toBe(piece2.typeId);
+    const pieceRetrieved = handler.getPieceDTO(pieceCreated.id);
+    expect(pieceRetrieved).toBeDefined();
+    expect(pieceRetrieved.typeId).toBeDefined();
+
+    expect(pieceCreated.type.id).toBe(pieceRetrieved.typeId);
   });
 
   it('moves piece', () => {

@@ -3,6 +3,20 @@ import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
 import { getClampedPosition, getGriddedPosition } from "./piecePosition";
 
+/**
+ * Create all the necesary functions to enable
+ * piece interactivity to mouse events
+ * @param {number} pieceId - the piece unique identifier
+ * @param {func} setPiece - React Hook updater of the piece state.
+ * It is used to enfore piece rerendering.
+ * @param {GameHandler} gameHandler - used to update the gameHandler
+ * state if the piece state changes
+ * @param {func} handleGameChange - lets to change the game state
+ * if necessary. For example, it would be used if the last piece
+ * was dragged to the right position, solving the whole puzzle.
+ * @returns {Object}
+ */
+
 function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
   const [dragState, setDragState] = useState({
     isDragging: false,
@@ -11,6 +25,11 @@ function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
     y: 0,
   });
 
+  /* It turns some position to a valid one
+  * A valid position in one which ensures the figure
+  * has not been dragged outside the parent component bounds
+  * And which applies the grid principle
+  * */
   const getPositionFromEvent = (e) => {
     // Get mouse position
     const { x, y } = e.target.position();
@@ -35,6 +54,8 @@ function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
       clampedPosition.y,
     );
   };
+
+  // EVENT HANDLING FUNCTIONS
 
   const handleDragStart = (e) => {
     const { x, y } = getPositionFromEvent(e);

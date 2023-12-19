@@ -1,10 +1,18 @@
 export default class Piece {
-  constructor(id, type, x = 0, y = 0, a = 0) {
-    this.id = id;
+  static nextId = 0;
+
+  constructor(type, x = 0, y = 0, a = 0) {
+    this.id = Piece.#getNextId();
     this.type = type;
     this.x = x;
     this.y = y;
     this.a = a;
+  }
+
+  // Generate unique ids
+  static #getNextId() {
+    this.nextId += 1;
+    return this.nextId;
   }
 
   setPosition(x, y) {

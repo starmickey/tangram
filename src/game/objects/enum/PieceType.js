@@ -1,28 +1,28 @@
 const PieceType = {
   STRIANGLE: {
     id: 0,
-    height: 70.71,
     width: 141.42,
+    height: 70.71,
   },
   MTRIANGLE: {
     id: 1,
-    height: 100,
     width: 200,
+    height: 100,
   },
   LTRIANGLE: {
     id: 2,
-    height: 141.42,
     width: 282.84,
+    height: 141.42,
   },
   PARALLELOGRAM: {
     id: 3,
-    height: 70.71,
     width: 212.13,
+    height: 70.71,
   },
   SQUARE: {
     id: 4,
-    height: 100,
     width: 100,
+    height: 100,
   },
 };
 
