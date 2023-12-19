@@ -1,9 +1,0 @@
-.piece {
-  position: absolute;
-}
-
-.piece:hover {
-  filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.1));
-}
-
-

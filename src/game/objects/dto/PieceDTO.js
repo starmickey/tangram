@@ -1,13 +1,12 @@
 export default class PieceDTO {
-  constructor(id, typeId, src, height, width, x, y, a) {
+  constructor(id, typeId, width, height, x = 0, y = 0, a = 0) {
     this.id = id;
     this.typeId = typeId;
-    this.src = src;
     this.height = height;
     this.width = width;
     this.x = x;
     this.y = y;
-    this.a = a;
+    this.a = a % 360;
   }
 
   setPosition(x, y) {
@@ -16,6 +15,6 @@ export default class PieceDTO {
   }
 
   setA(a) {
-    this.a = a;
+    this.a = a % 360;
   }
 }

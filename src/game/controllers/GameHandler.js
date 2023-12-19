@@ -1,11 +1,11 @@
 import PieceHandler from "./PieceHandler";
-import piecesSet from "./PiecesSet";
+// import piecesSet from "./PiecesSet";
 // import GameState from "./GameState";
 
 export default class GameHandler {
-  constructor(state) {
+  constructor(pieces, state) {
+    this.pieceHandler = new PieceHandler(pieces);
     this.state = state;
-    this.pieceHandler = new PieceHandler(piecesSet);
   }
 
   getPieceDTO(pieceId) {

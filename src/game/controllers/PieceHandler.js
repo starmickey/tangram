@@ -1,49 +1,55 @@
 import PieceDTO from "../objects/dto/PieceDTO";
 import Piece from "./Piece";
+import { getPieceType } from "../objects/enum/PieceType";
 
 export default class PieceHandler {
   constructor(pieces) {
     this.pieces = [];
     // Type validation
     pieces.forEach((piece) => {
-      if (piece instanceof Piece) {
-        this.pieces.push(piece);
+      if (piece instanceof PieceDTO) {
+        this.pieces.push(PieceHandler.#pieceDTOtoPiece(piece));
       } else {
         throw new Error("Invalid Parameters");
       }
     });
   }
 
-  getPieceDTO(pieceId) {
-    let pieceDTO;
-
-    this.pieces.forEach((piece) => {
-      if (piece.id === pieceId) {
-        pieceDTO = new PieceDTO(
-          piece.id,
-          piece.type.id,
-          piece.type.src,
-          piece.type.height,
-          piece.type.width,
-          piece.x,
-          piece.y,
-          piece.a,
-        );
-      }
-    });
-
-    return pieceDTO;
+  static #pieceDTOtoPiece(pieceDTO) {
+    return new Piece(
+      pieceDTO.id,
+      getPieceType(pieceDTO.typeId),
+      pieceDTO.x,
+      pieceDTO.y,
+      pieceDTO.a,
+    );
   }
 
-  // movePiece(pieceId, diffX, diffY) {
-  movePiece(pieceId, x, y) {
+  static #pieceToPieceDTO(piece) {
+    return new PieceDTO(
+      piece.id,
+      piece.type.id,
+      piece.type.width,
+      piece.type.height,
+      piece.x,
+      piece.y,
+      piece.a,
+    );
+  }
+
+  getPieceDTO(pieceId) {
+    const filteredPieces = this.pieces.filter((p) => (pieceId === p.id));
+    const piece = filteredPieces[0];
+    return PieceHandler.#pieceToPieceDTO(piece);
+    // return pieceDTO;
+  }
+
+  movePiece(pieceId, diffX, diffY) {
     this.pieces.forEach((piece) => {
       if (piece.id === pieceId) {
         piece.setPosition(
-          // piece.x + diffX,
-          // piece.y + diffY,
-          x,
-          y,
+          piece.x + diffX,
+          piece.y + diffY,
         );
       }
     });

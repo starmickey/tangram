@@ -3,10 +3,10 @@ import { useState } from "react";
 import GameHandler from "../controllers/GameHandler";
 import useDragAndClick from "./utils/useDragAndClick";
 import PieceComponent from "./utils/PieceComponent";
-import "../styles/pieceType.css";
 
 function Piece({ pieceId, gameHandler, handleGameChange }) {
-  const [piece, setPiece] = useState(gameHandler.getPieceDTO(pieceId));
+  const pieceDTO = gameHandler.getPieceDTO(pieceId);
+  const [piece, setPiece] = useState(pieceDTO);
 
   const {
     isDragging,

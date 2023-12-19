@@ -2,8 +2,6 @@ import { Shape } from "react-konva";
 import PropTypes from "prop-types";
 import PieceDTO from "../../objects/dto/PieceDTO";
 
-/* eslint-disable no-unused-vars */
-
 function Triangle({
   piece,
   isDragging,
@@ -41,7 +39,7 @@ function Triangle({
       offsetX={piece.width / 2}
       offsetY={piece.height / 2}
       // it moves to front on drag
-      zIndex={isDragging ? 6 : 0}
+      // zIndex={isDragging ? 6 : 0}
       // shadow
       shadowOffsetX={isDragging ? 1 : 0.5}
       shadowOffsetY={isDragging ? 1 : 0.5}

@@ -1,32 +1,76 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
+import { getClampedPosition, getGriddedPosition } from "./piecePosition";
 
 function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
-  const [isDragging, setIsDragging] = useState(false);
+  const [dragState, setDragState] = useState({
+    isDragging: false,
+    // Mouse position; used to measure displacement
+    x: 0,
+    y: 0,
+  });
 
-  const handleDragStart = () => {
-    setIsDragging(true);
+  const getPositionFromEvent = (e) => {
+    // Get mouse position
+    const { x, y } = e.target.position();
+    // Get the stage dimensions
+    const stageWidth = e.target.getStage().width();
+    const stageHeight = e.target.getStage().height();
+    // Get the target dimensions
+    const targetWidth = e.target.width();
+    const targetHeight = e.target.height();
+    // Clamp position to keep it inside the stage
+    const clampedPosition = getClampedPosition(
+      x,
+      y,
+      targetWidth,
+      targetHeight,
+      stageWidth,
+      stageHeight,
+    );
+    // Round position values to grid unit
+    return getGriddedPosition(
+      clampedPosition.x,
+      clampedPosition.y,
+    );
+  };
+
+  const handleDragStart = (e) => {
+    const { x, y } = getPositionFromEvent(e);
+    setDragState({ isDragging: true, x, y });
   };
 
   const handleDragEnd = (e) => {
-    if (isDragging) {
-      // update controllers to check if puzzle is solved
-      gameHandler.movePiece(pieceId, e.target.x(), e.target.y());
-      // if puzzle is solved, refresh parent window
+    if (dragState.isDragging) {
+      // Clamp position to keep it inside the stage
+      const { x, y } = getPositionFromEvent(e);
+      // Get mouse displacement since drag start
+      const diffX = x - dragState.x;
+      const diffY = y - dragState.y;
+      // Update controller state
+      gameHandler.movePiece(pieceId, diffX, diffY);
+      // Rerender piece
+      const pieceDTO = gameHandler.getPieceDTO(pieceId);
+      e.target.position({ x: pieceDTO.x, y: pieceDTO.y });
+      e.target.getLayer().batchDraw();
+      // parent component actions
       handleGameChange();
     }
-    setIsDragging(false);
+    setDragState({
+      ...dragState,
+      isDragging: false,
+    });
   };
 
   const handleClick = () => {
-    if (!isDragging) {
-      // update controllers to check if puzzle is solved
+    if (!dragState.isDragging) {
+      // update controller state
       gameHandler.rotatePiece(pieceId, 45);
       // rerender piece
       const pieceDTO = gameHandler.getPieceDTO(pieceId);
       setPiece(pieceDTO);
-      // if puzzle is solved, refresh parent window
+      // parent component actions
       handleGameChange();
     }
   };
@@ -44,7 +88,7 @@ function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
   }, []); // Cleanup on unmount
 
   return {
-    isDragging,
+    isDragging: dragState.isDragging,
     handleDragStart,
     handleDragEnd,
     handleClick,

@@ -1,26 +1,40 @@
 import PieceHandler from "../controllers/PieceHandler";
-import Piece from "../controllers/Piece";
+import PieceDTO from "../objects/dto/PieceDTO";
 import PieceType from "../objects/enum/PieceType"
 
 describe("Piece Handler", () => {
-  it("gets a piece DTO", () => {
-    const piece = new Piece(1, PieceType.STRIANGLE);
+  it('creates a piece handler', () => {
+    const piece = new PieceDTO(1, 2, 3, 4);
     const handler = new PieceHandler([piece]);
-    const pieceDTO = handler.getPieceDTO(1);
+    expect(handler).toBeDefined();
+  });
+  
+  it("gets a piece DTO", () => {
+    const piece = new PieceDTO(1, 2, 3, 4);
+    const handler = new PieceHandler([piece]);
 
-    expect(pieceDTO.id).toBe(1);
-    expect(pieceDTO.typeId).toBe(PieceType.STRIANGLE.id);
+    expect(handler).toBeDefined();
+    expect(handler.pieces).toBeDefined();
+    expect(handler.pieces.length).toBe(1);
+    expect(handler.pieces[0].id).toBe(piece.id);
+
+    const piece2 = handler.getPieceDTO(piece.id);
+
+    expect(piece.id).toBe(piece2.id);
+    expect(piece.typeId).toBe(piece2.typeId);
   });
 
   it('moves piece', () => {
-    const piece = new Piece(1, PieceType.STRIANGLE);
+    const [startX, startY] = [100, 200]
+    const piece = new PieceDTO(1, 2, 3, 4, startX, startY);
     const handler = new PieceHandler([piece]);
-    const [x, y] = [100, 200];
-    const diffCoef = 12;
-    handler.movePiece(1, x, y);
+    const diff = 12;
+    handler.movePiece(1, diff, diff);
 
     expect(handler.pieces[0]).toBeDefined();
-    expect(handler.pieces[0].x).toBeGreaterThanOrEqual(x-diffCoef);
-    expect(handler.pieces[0].y).toBeGreaterThanOrEqual(y-diffCoef);
+
+    const { x, y } = handler.pieces[0];
+    expect(x).toBeGreaterThanOrEqual(startX);
+    expect(y).toBeGreaterThanOrEqual(startY);
   });
 });

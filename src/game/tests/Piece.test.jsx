@@ -1,16 +1,15 @@
 import { render } from "@testing-library/react";
 import Piece from "../components/Piece";
 import GameHandler from "../controllers/GameHandler";
-import PieceHandler from "../controllers/PieceHandler";
-import PieceC from "../controllers/Piece"
+import PieceDTO from "../objects/dto/PieceDTO";
 import PieceType from "../objects/enum/PieceType";
+import GameState from "../objects/enum/GameState";
 
 describe("Piece", () => {
   it("renders Piece", () => {
-    const piece = new PieceC(1, PieceType.STRIANGLE);
-    const pieces = [piece];
-    const pieceHandler = new PieceHandler(pieces);
-    const gameHandler = new GameHandler(pieceHandler)
+    const { id, height, width } = PieceType.STRIANGLE; 
+    const piece = new PieceDTO(1, id, height, width);
+    const gameHandler = new GameHandler([piece], GameState.GAME)
     const handleGameChange = () => {
       console.log("Handle Game Change Function");
     }
