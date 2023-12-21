@@ -1,5 +1,5 @@
-import PieceDTO from "../../objects/dto/PieceDTO";
-import PieceType from "../../objects/enum/PieceType";
+import PieceDTO from "../objects/dto/PieceDTO";
+import PieceType from "../objects/enum/PieceType";
 
 /**
  * It creates the tangram default pieces

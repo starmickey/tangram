@@ -2,6 +2,12 @@ import PropTypes from "prop-types";
 import PlayingArea from "../../components/PlayingArea";
 import GameState from "../../objects/enum/GameState";
 
+/**
+ * Set the window displayed when we are playing
+ * @param {GameState} gameState - get parent state
+ * @param {func} setGameState - set parent state
+ * @returns {div}
+ */
 function PlayingPage({ gameState, setGameState }) {
   return (
     <div className="playing-area-container">

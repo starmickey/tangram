@@ -10,6 +10,22 @@ export default class PieceDTO {
    * @param {number} a - rotation
    */
   constructor(id, typeId, width, height, x = 0, y = 0, a = 0) {
+    if (
+      typeof id !== "number"
+      || typeof typeId !== "number"
+      || typeof x !== "number"
+      || typeof y !== "number"
+      || typeof a !== "number"
+      || typeof width !== "number"
+      || typeof height !== "number"
+      || a < 0
+      || a > 360
+      || width < 0
+      || height < 0
+    ) {
+      throw new Error("Invalid input parameters");
+    }
+
     this.id = id;
     this.typeId = typeId;
     this.width = width;

@@ -5,5 +5,5 @@
  * Especially to make easier to drag the piece to the
  * solution point
  */
-const GRID_UNIT = 5;
-export default GRID_UNIT;
+export const scale = window.innerWidth / 1300;
+export const GRID_UNIT = Math.round(scale * 5);

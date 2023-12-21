@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
-import { getClampedPosition, getGriddedPosition } from "./piecePosition";
+import { getClampedPosition, getGriddedPosition } from "./pieceMoving";
 
 /**
  * Create all the necesary functions to enable

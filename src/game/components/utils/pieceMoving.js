@@ -1,4 +1,4 @@
-import GRID_UNIT from "./constants";
+import { GRID_UNIT } from "./constants";
 
 /**
  * Clamps the position within the specified container boundaries.
@@ -10,7 +10,6 @@ import GRID_UNIT from "./constants";
  * @param {number} containerHeight - Height of the container.
  * @returns {Object} - Clamped position {x, y}.
  */
-
 export function getClampedPosition(
   x,
   y,
@@ -51,23 +50,71 @@ export function getClampedPosition(
  * solution positions.
  * @param {number} x - X-coordinate of the position.
  * @param {number} y - Y-coordinate of the position.
+ * @param {number} scale - Screen scale
  * @returns {Object} - Gridded position {x, y}.
  */
 
-export function getGriddedPosition(x, y) {
+export function getGriddedPosition(x, y, scale = 1) {
   // Validate input parameters
   if (
     typeof x !== "number"
     || typeof y !== "number"
-    || x < 0
-    || y < 0
+    || typeof scale !== "number"
   ) {
     throw new Error("Invalid input parameters.");
   }
+  // Calculate grid unit
+  const gridUnit = Math.round(GRID_UNIT * scale);
   // Round to gridunit
   return {
-    x: Math.round(x / GRID_UNIT) * GRID_UNIT,
-    y: Math.round(y / GRID_UNIT) * GRID_UNIT,
+    x: Math.round(x / gridUnit) * gridUnit,
+    y: Math.round(y / gridUnit) * gridUnit,
+  };
+}
+
+export function getPiecePosition(
+  x,
+  y,
+  targetWidth,
+  targetHeight,
+  containerWidth,
+  containerHeight,
+) {
+  if (
+    typeof targetWidth !== "number"
+    || typeof targetHeight !== "number"
+    || typeof containerWidth !== "number"
+    || typeof containerHeight !== "number"
+    || targetWidth < 0
+    || targetHeight < 0
+    || containerWidth < 0
+    || containerHeight < 0
+  ) {
+    throw new Error("Invalid input parameters");
+  }
+
+  const centerX = containerWidth / 2;
+  const centerY = containerHeight / 2;
+  const centeredPosition = getPositionRelativeToCenter(x, y, centerX, centerY);
+  const clampedPosition = getClampedPosition(
+    centeredPosition.x,
+    centeredPosition.y,
+    targetWidth,
+    targetHeight,
+    containerWidth,
+    containerHeight,
+  );
+  // Round position to the grid unit
+  const griddedPosition = getGriddedPosition(
+    clampedPosition.x,
+    clampedPosition.y,
+  );
+
+  const newPosition = griddedPosition;
+
+  return {
+    x: newPosition.x,
+    y: newPosition.y,
   };
 }
 

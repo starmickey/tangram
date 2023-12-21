@@ -4,6 +4,7 @@ import { Shape } from "react-konva";
 import GameHandler from "../controllers/GameHandler";
 import useDragAndClick from "./utils/useDragAndClick";
 import getCorners from "./utils/getCornersStrategy";
+import { scale } from "./utils/constants";
 
 /**
  * Renders a dynamic piece component
@@ -13,7 +14,11 @@ import getCorners from "./utils/getCornersStrategy";
  * @param {func} handleGameChange - changes the parent compoment state
  */
 
-function Piece({ pieceId, gameHandler, handleGameChange }) {
+function Piece({
+  pieceId,
+  gameHandler,
+  handleGameChange,
+}) {
   // Validate inputs
   if (pieceId < 0) {
     throw new Error("Invalid input parameters");
@@ -96,14 +101,14 @@ function Piece({ pieceId, gameHandler, handleGameChange }) {
       }
       // scale on drag
       scaleX={
-        isDragging
+        scale * (isDragging
           ? styles.scaleOnDrag
-          : 1
+          : 1)
       }
       scaleY={
-        isDragging
+        scale * (isDragging
           ? styles.scaleOnDrag
-          : 1
+          : 1)
       }
     />
   );

@@ -6,9 +6,10 @@ import PieceType from "../objects/enum/PieceType";
 
 describe('Solution Handler', () => {
   it('Creates a solution with default parameters', () => {
-    const solutionHandler = SolutionHandler.getDefaultSolution();
+    const solutionHandler = new SolutionHandler();
 
     expect(solutionHandler.solution).toBeDefined();
+    expect(solutionHandler.solution).toBeInstanceOf(Solution);
   });
 
   it('gets a solution DTO', () => {

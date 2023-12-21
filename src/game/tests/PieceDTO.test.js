@@ -1,22 +1,19 @@
-import PieceDTO from "../controllers/PieceDTO";
+import PieceDTO from "../objects/dto/PieceDTO";
 
 describe("PieceDTO", () => {
   it("creates pieces even without positions", () => {
-    const type = { src: "", height: 10, width: 10 };
-    const piece = new PieceDTO(0, type);
+    const piece = new PieceDTO(0, 0, 10, 10);
     expect(piece).toBeDefined();
   });
 
   it("rotates piece", () => {
-    const type = { src: "", height: 10, width: 10 };
-    const piece = new PieceDTO(0, type);
+    const piece = new PieceDTO(0, 0, 10, 10);
     piece.setA(12);
     expect(piece.a).toBe(12);
   });
 
   it("moves the piece", () => {
-    const type = { src: "", height: 10, width: 10 };
-    const piece = new PieceDTO(0, type);
+    const piece = new PieceDTO(0, 0, 10, 10);
     piece.setPosition(1,2)
     expect(piece.x).toBe(1);
     expect(piece.y).toBe(2);

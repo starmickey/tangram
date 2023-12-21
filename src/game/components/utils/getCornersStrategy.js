@@ -6,6 +6,15 @@ import CornerDTO from "./CornerDTO";
 function getSquareCorners(piece) {
   // Get piece sizes
   const { width, height } = PieceType.getPieceType(piece.typeId);
+  // Validate inputs
+  if (
+    typeof width !== "number"
+    || typeof height !== "number"
+    || width <= 0
+    || height <= 0
+  ) {
+    throw new Error("Invalid inputs");
+  }
   // Get corners
   const corners = [
     new CornerDTO(0, 0),
@@ -19,6 +28,15 @@ function getSquareCorners(piece) {
 function getTriangleCorners(piece) {
   // Get piece sizes
   const { width, height } = PieceType.getPieceType(piece.typeId);
+  // Validate inputs
+  if (
+    typeof width !== "number"
+    || typeof height !== "number"
+    || width <= 0
+    || height <= 0
+  ) {
+    throw new Error("Invalid inputs");
+  }
   // Get corners
   const corners = [
     new CornerDTO(width / 2, 0),
@@ -31,7 +49,16 @@ function getTriangleCorners(piece) {
 function getParallelogramCorners(piece) {
   // Get piece sizes
   const { width, height } = PieceType.getPieceType(piece.typeId);
-
+  // Validate inputs
+  if (
+    typeof width !== "number"
+    || typeof height !== "number"
+    || width <= 0
+    || height <= 0
+  ) {
+    throw new Error("Invalid inputs");
+  }
+  // Get corners
   const corners = [
     new CornerDTO(0, 0),
     new CornerDTO((2 / 3) * width, 0),
@@ -42,7 +69,7 @@ function getParallelogramCorners(piece) {
 }
 
 /**
- * Get the corners of a no rotated piece
+ * Get the corners of a not rotated piece
  * @param {PieceDTO or SolutionPieceDTO} piece - a piece
  * @returns {ArrayOf(CornerDTO)} - the corners of this piece
  */
@@ -64,6 +91,6 @@ export default function getCorners(piece) {
     case PieceType.PARALLELOGRAM.id:
       return getParallelogramCorners(piece);
     default:
-      throw new Error(`not implemented for type ${piece.typeId} yet :)`);
+      throw new Error(`not implemented for type ${piece.typeId} yet`);
   }
 }

@@ -1,14 +1,15 @@
 import { Group, Shape } from "react-konva";
 import SolutionHandler from "../controllers/SolutionHandler";
 import getCorners from "./utils/getCornersStrategy";
+import { scale } from "./utils/constants";
 
 /**
  * Renders the solution shadow
  * @returns {Group} - a group of shapes
  */
 
-export default function Solution() {
-  const solutionHandler = SolutionHandler.getDefaultSolution();
+function Solution() {
+  const solutionHandler = new SolutionHandler();
   const solutionDTO = solutionHandler.getSolutionDTO();
   const spDTOs = solutionDTO.pieces;
 
@@ -31,12 +32,22 @@ export default function Solution() {
             context.closePath();
             context.fillStrokeShape(shape);
           }}
+          // position
           x={sp.x}
           y={sp.y}
-          a={sp.a}
+          rotation={sp.a}
+          // dimensions
+          width={sp.width}
+          height={sp.height}
+          // ensure it rotates around its center
+          offsetX={sp.width / 2}
+          offsetY={sp.height / 2}
           fill="grey"
+          scale={{ x: scale, y: scale }}
         />
       ))}
     </Group>
   );
 }
+
+export default Solution;

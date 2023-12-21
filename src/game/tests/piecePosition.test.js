@@ -1,5 +1,5 @@
-import GRID_UNIT from "../components/utils/constants";
-import { getClampedPosition, getGriddedPosition, getRandomPosition } from "../components/utils/piecePosition";
+import { GRID_UNIT } from "../components/utils/constants";
+import { getClampedPosition, getGriddedPosition, getRandomPosition } from "../components/utils/pieceMoving";
 
 describe('piece poisition tests', () => { 
   it('clamps positions', () => {

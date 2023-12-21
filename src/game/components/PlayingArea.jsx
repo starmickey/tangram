@@ -1,10 +1,10 @@
-import { Stage, Layer } from "react-konva";
 import PropTypes from "prop-types";
+import { Stage, Layer } from "react-konva";
 import Piece from "./Piece";
 import Solution from "./Solution";
 import GameHandler from "../controllers/GameHandler";
-import getPiecesSet from "./utils/getPiecesSet";
-import { getRandomPosition } from "./utils/piecePosition";
+import getPiecesSet from "../models/getPiecesSet";
+import { getRandomPosition } from "./utils/pieceMoving";
 import "../styles/game.css";
 import GameState from "../objects/enum/GameState";
 
@@ -35,7 +35,7 @@ function PlayingArea({
     || pwidth >= 1
     || pheight >= 1
   ) {
-    throw new Error("Invalid parameters. Pwidth and pheight must be greater than zero and less than one");
+    throw new Error("Invalid parameters. Pwidth and pheight must be between zero and one");
   }
 
   // Calculate stage dimensions in pixels
