@@ -1,6 +1,7 @@
 import Piece from "../objects/data/Piece";
 import PieceDTO from "../objects/dto/PieceDTO";
-import { getPieceType } from "../objects/enum/PieceType";
+import GameState from "../objects/enum/GameState";
+import PieceType from "../objects/enum/PieceType";
 
 class GameHandler {
   constructor(pieces, state) {
@@ -8,7 +9,7 @@ class GameHandler {
     if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
       throw new Error("piece inputs have invalid types");
     }
-    if (typeof state !== "number") {
+    if (!(state instanceof GameState)) {
       throw new Error("game state has an invalid type");
     }
     // Assign attributes
@@ -18,7 +19,7 @@ class GameHandler {
 
   static #pieceDTOtoPiece(pieceDTO) {
     return new Piece(
-      getPieceType(pieceDTO.typeId),
+      PieceType.getPieceType(pieceDTO.typeId),
       pieceDTO.x,
       pieceDTO.y,
       pieceDTO.a,

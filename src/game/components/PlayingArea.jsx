@@ -5,6 +5,7 @@ import GameHandler from "../controllers/GameHandler";
 import getPiecesSet from "./utils/getPiecesSet";
 import { getRandomPosition } from "./utils/piecePosition";
 import "../styles/game.css";
+import GameState from "../objects/enum/GameState";
 
 /**
  * Creates and styles the "playing area".
@@ -19,6 +20,7 @@ import "../styles/game.css";
  * happen when the puzzle is solved.
  * @param {function} setGameState - sets the gameState
  */
+
 function PlayingArea({
   pwidth,
   pheight,
@@ -93,7 +95,7 @@ function PlayingArea({
 PlayingArea.propTypes = {
   pwidth: PropTypes.number.isRequired,
   pheight: PropTypes.number.isRequired,
-  gameState: PropTypes.number.isRequired,
+  gameState: PropTypes.instanceOf(GameState).isRequired,
   setGameState: PropTypes.func.isRequired,
 };
 

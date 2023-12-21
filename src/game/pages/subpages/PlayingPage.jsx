@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import PlayingArea from "../../components/PlayingArea";
+import GameState from "../../objects/enum/GameState";
 
 function PlayingPage({ gameState, setGameState }) {
   return (
@@ -15,7 +16,7 @@ function PlayingPage({ gameState, setGameState }) {
 }
 
 PlayingPage.propTypes = {
-  gameState: PropTypes.number.isRequired,
+  gameState: PropTypes.instanceOf(GameState).isRequired,
   setGameState: PropTypes.func.isRequired,
 };
 

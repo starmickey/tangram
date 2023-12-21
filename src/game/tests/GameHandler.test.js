@@ -12,7 +12,7 @@ describe('Game Handler tests', () => {
     expect(gameHandler).toBeDefined();
     expect(gameHandler.pieces.length).toBeGreaterThanOrEqual(0);
     expect(gameHandler.pieces[0]).toBeInstanceOf(Piece);
-    expect(gameHandler.state).toBeGreaterThanOrEqual(0);
+    expect(gameHandler.state).toBeInstanceOf(GameState);
   });
 
   it('gets a piece DTO', () => {
