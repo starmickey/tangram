@@ -1,6 +1,7 @@
 import { Stage, Layer } from "react-konva";
 import PropTypes from "prop-types";
 import Piece from "./Piece";
+import Solution from "./Solution";
 import GameHandler from "../controllers/GameHandler";
 import getPiecesSet from "./utils/getPiecesSet";
 import { getRandomPosition } from "./utils/piecePosition";
@@ -77,7 +78,12 @@ function PlayingArea({
   return (
     <div className="playing-area" style={playingAreaStyle}>
       <Stage width={stageWidth} height={stageHeight} id="stage">
+        {/* Render the solution shadow */}
         <Layer>
+          <Solution />
+        </Layer>
+        <Layer>
+          {/* Render interactiv pieces */}
           {piecesIds.map((pieceId) => (
             <Piece
               key={pieceId}

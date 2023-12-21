@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { Shape } from "react-konva";
 import GameHandler from "../controllers/GameHandler";
 import useDragAndClick from "./utils/useDragAndClick";
-import PieceComponent from "./utils/PieceComponent";
+import getCorners from "./utils/getCornersStrategy";
 
 /**
  * Renders a dynamic piece component
@@ -31,13 +32,6 @@ function Piece({ pieceId, gameHandler, handleGameChange }) {
     handleClick,
   } = useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange);
 
-  // Create handlers package for creating piececomponent
-  const handlers = {
-    handleDragStart,
-    handleDragEnd,
-    handleClick,
-  };
-
   // Custom pieces styles
   const styles = {
     fill: "#00D2FF",
@@ -50,13 +44,67 @@ function Piece({ pieceId, gameHandler, handleGameChange }) {
     scaleOnDrag: 1.05,
   };
 
-  // Render piece component
   return (
-    <PieceComponent
-      piece={piece}
-      isDragging={isDragging}
-      handlers={handlers}
-      styles={styles}
+    <Shape
+      // Draw the piece
+      sceneFunc={(context, shape) => {
+        const corners = getCorners(piece);
+        const lastCorner = corners[corners.length - 1];
+        context.beginPath();
+        context.moveTo(lastCorner.x, lastCorner.y);
+        corners.forEach((c) => {
+          const { x, y } = c;
+          context.lineTo(x, y);
+        });
+        context.closePath();
+        context.fillStrokeShape(shape);
+      }}
+      // position
+      x={piece.x}
+      y={piece.y}
+      rotation={piece.a}
+      // dimensions
+      width={piece.width}
+      height={piece.height}
+      // events handling
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onClick={handleClick}
+      // format
+      fill={styles.fill}
+      stroke={styles.stroke}
+      strokeWidth={styles.strokeWidth}
+      // ensure it rotates around its center
+      offsetX={piece.width / 2}
+      offsetY={piece.height / 2}
+      // shadow
+      shadowOffsetX={
+        isDragging
+          ? styles.shadowOffset
+          : styles.shadowOffsetOnDrag
+      }
+      shadowOffsetY={
+        isDragging
+          ? styles.shadowOffset
+          : styles.shadowOffsetOnDrag
+      }
+      shadowBlur={
+        isDragging
+          ? styles.shadowBlur
+          : styles.shadowBlurOnDrag
+      }
+      // scale on drag
+      scaleX={
+        isDragging
+          ? styles.scaleOnDrag
+          : 1
+      }
+      scaleY={
+        isDragging
+          ? styles.scaleOnDrag
+          : 1
+      }
     />
   );
 }

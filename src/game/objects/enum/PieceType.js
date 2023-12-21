@@ -1,13 +1,14 @@
 export default class PieceType {
   static nextId = 0;
 
-  static STRIANGLE = new PieceType("striangle", 141.42, 70.71);
+  // Default types
+  static STRIANGLE = new PieceType("striangle", 141, 71);
 
   static MTRIANGLE = new PieceType("mtriangle", 200, 100);
 
-  static LTRIANGLE = new PieceType("ltriangle", 282.84, 141.42);
+  static LTRIANGLE = new PieceType("ltriangle", 283, 141);
 
-  static PARALLELOGRAM = new PieceType("parallelogram", 212.13, 70.71);
+  static PARALLELOGRAM = new PieceType("parallelogram", 212, 71);
 
   static SQUARE = new PieceType("square", 100, 100);
 

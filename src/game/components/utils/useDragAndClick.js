@@ -93,6 +93,8 @@ function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
       setPiece(pieceDTO);
       // parent component actions
       handleGameChange();
+      const { x, y } = pieceDTO;
+      console.log(`x: ${x} y:${y}`);
     }
   };
 

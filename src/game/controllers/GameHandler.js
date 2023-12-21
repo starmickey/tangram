@@ -4,6 +4,11 @@ import GameState from "../objects/enum/GameState";
 import PieceType from "../objects/enum/PieceType";
 
 class GameHandler {
+  /**
+   * Create a new GameHandler
+   * @param {PieceDTO} pieces - interactive pieces
+   * @param {GameState} state - start game state
+   */
   constructor(pieces, state) {
     // Validate inputs
     if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
@@ -38,6 +43,11 @@ class GameHandler {
     );
   }
 
+  /**
+   * Get the piece DTO of one of the pices of the gameHandler
+   * @param {number} pieceId - the unique id of the piece
+   * @returns {PieceDTO}
+   */
   getPieceDTO(pieceId) {
     const filteredPieces = this.pieces.filter((p) => (pieceId === p.id));
 
@@ -78,6 +88,11 @@ class GameHandler {
     );
   }
 
+  /**
+   * Rotate a gameHandler piece
+   * @param {number} pieceId - the piece unique identifier
+   * @param {number} diffA - the difference between the last angle and the new one
+   */
   rotatePiece(pieceId, diffA) {
     // Get piece by its id
     const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
@@ -92,7 +107,8 @@ class GameHandler {
 
     // Rotate piece
     const piece = filteredPieces[0];
-    piece.setA(piece.a + diffA);
+    const newA = (piece.a + diffA) % 360;
+    piece.setA(newA);
   }
 
   getState() {

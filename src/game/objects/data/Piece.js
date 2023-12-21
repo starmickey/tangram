@@ -3,6 +3,13 @@ import PieceType from "../enum/PieceType";
 export default class Piece {
   static nextId = 0;
 
+  /**
+   * Create a new Piece object
+   * @param {PieceType} type - the piece type
+   * @param {number} x - X-coordinate
+   * @param {number} y - Y-coordinate
+   * @param {number} a - rotation
+   */
   constructor(type, x = 0, y = 0, a = 0) {
     // Validate inputs
     if (
@@ -13,7 +20,7 @@ export default class Piece {
       || a < 0
       || a > 360
     ) {
-      throw new Error("Invalid inputs");
+      throw new Error("Invalid input parameters");
     }
 
     // Assign attributes
@@ -30,6 +37,11 @@ export default class Piece {
     return this.nextId;
   }
 
+  /**
+   * Update piece position
+   * @param {number} x - new X-coordinate
+   * @param {number} y - new Y-coordinate
+   */
   setPosition(x, y) {
     // Validate inputs
     if (
@@ -44,6 +56,10 @@ export default class Piece {
     this.y = y;
   }
 
+  /**
+   * Rotate piece
+   * @param {number} a - new angle
+   */
   setA(a) {
     // Validate inputs
     if (
@@ -51,7 +67,7 @@ export default class Piece {
       || a < 0
       || a > 360
     ) {
-      throw new Error("Invalid inputs");
+      throw new Error(`Invalid angle ${a}`);
     }
 
     // Assign attributes
