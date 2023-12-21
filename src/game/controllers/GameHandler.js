@@ -1,5 +1,6 @@
-import PieceHandler from "./PieceHandler";
+import Piece from "../objects/data/Piece";
 import PieceDTO from "../objects/dto/PieceDTO";
+import { getPieceType } from "../objects/enum/PieceType";
 
 class GameHandler {
   constructor(pieces, state) {
@@ -10,26 +11,87 @@ class GameHandler {
     if (typeof state !== "number") {
       throw new Error("game state has an invalid type");
     }
-
-    // Assign non-static variables
-    this.pieceHandler = new PieceHandler(pieces);
+    // Assign attributes
+    this.pieces = pieces.map((piece) => GameHandler.#pieceDTOtoPiece(piece));
     this.state = state;
   }
 
+  static #pieceDTOtoPiece(pieceDTO) {
+    return new Piece(
+      getPieceType(pieceDTO.typeId),
+      pieceDTO.x,
+      pieceDTO.y,
+      pieceDTO.a,
+    );
+  }
+
+  static #pieceToPieceDTO(piece) {
+    return new PieceDTO(
+      piece.id,
+      piece.type.id,
+      piece.type.width,
+      piece.type.height,
+      piece.x,
+      piece.y,
+      piece.a,
+    );
+  }
+
   getPieceDTO(pieceId) {
-    return this.pieceHandler.getPieceDTO(pieceId);
+    const filteredPieces = this.pieces.filter((p) => (pieceId === p.id));
+
+    // Error handling
+    if (filteredPieces.length === 0) {
+      throw new Error(`piece with id "${pieceId}" wasn't found.`);
+    }
+    if (filteredPieces.length > 1) {
+      throw new Error(`more than one piece was found with id ${pieceId}`);
+    }
+
+    // Create pieceDTO
+    const piece = filteredPieces[0];
+    return GameHandler.#pieceToPieceDTO(piece);
   }
 
   getPiecesDTOs() {
-    return this.pieceHandler.getPiecesDTOs();
+    return this.pieces.map((piece) => GameHandler.#pieceToPieceDTO(piece));
   }
 
-  movePiece(pieceId, x, y) {
-    return this.pieceHandler.movePiece(pieceId, x, y);
+  movePiece(pieceId, diffX, diffY) {
+    // Get piece by its id
+    const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
+
+    // Error handling
+    if (filteredPieces.length === 0) {
+      throw new Error(`piece with id "${pieceId}" wasn't found.`);
+    }
+    if (filteredPieces.length > 1) {
+      throw new Error(`more than one piece was found with id ${pieceId}`);
+    }
+
+    // Move piece
+    const piece = filteredPieces[0];
+    piece.setPosition(
+      piece.x + diffX,
+      piece.y + diffY,
+    );
   }
 
-  rotatePiece(pieceId, a) {
-    return this.pieceHandler.rotatePiece(pieceId, a);
+  rotatePiece(pieceId, diffA) {
+    // Get piece by its id
+    const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
+
+    // Error handling
+    if (filteredPieces.length === 0) {
+      throw new Error(`piece with id "${pieceId}" wasn't found.`);
+    }
+    if (filteredPieces.length > 1) {
+      throw new Error(`more than one piece was found with id ${pieceId}`);
+    }
+
+    // Rotate piece
+    const piece = filteredPieces[0];
+    piece.setA(piece.a + diffA);
   }
 
   getState() {
@@ -37,7 +99,7 @@ class GameHandler {
   }
 
   getPiecesIds() {
-    return this.pieceHandler.pieces.map((piece) => piece.id);
+    return this.pieces.map((piece) => piece.id);
   }
 }
 

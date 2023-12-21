@@ -17,7 +17,6 @@ describe("Piece", () => {
     expect(piece).toBeDefined();
     expect(piece.typeId).toBe(id);
     expect(gameHandler).toBeDefined();
-    expect(gameHandler.pieceHandler.pieces.length).toBe(1);
     expect(gameHandler.getPiecesDTOs().length).toBe(1);
     expect(handleGameChange).toBeDefined();
 
