@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 import { Shape } from "react-konva";
 import GameHandler from "../controllers/GameHandler";
-import { ScaleContext } from "../contexts/ScaleContext";
+import { useScaleState } from "../contexts/StageContext";
 import useDragAndClick from "./utils/useDragAndClick";
 import getCorners from "./utils/getCornersStrategy";
 
@@ -18,15 +18,13 @@ function Piece({
   pieceId,
   gameHandler,
   handleGameChange,
-  stageWidth,
-  stageHeight,
 }) {
   // Validate inputs
-  if (
-    typeof pieceId !== "number"
-    || pieceId < 0
-  ) {
-    throw new Error("Invalid input parameters");
+  if (typeof pieceId !== "number" || pieceId < 0) {
+    throw new Error(`PieceId ${pieceId} is invalid. It must be a non-negative number`);
+  }
+  if (!gameHandler) {
+    throw new Error(`gameHandler ${gameHandler} is invalid`);
   }
 
   // Get actual piece state from Game Handler
@@ -37,7 +35,7 @@ function Piece({
   const pieceRef = useRef();
 
   // Get scale from context
-  const scale = useContext(ScaleContext);
+  const scale = useScaleState();
 
   // Get events handlers
   const {
@@ -52,8 +50,6 @@ function Piece({
     setPiece,
     gameHandler,
     handleGameChange,
-    stageWidth,
-    stageHeight,
   );
 
   // Custom pieces styles
@@ -62,8 +58,8 @@ function Piece({
     stroke: "#000000",
     strokeWidth: 0.1,
     shadowOffset: 0.5,
-    shadowOffsetOnDrag: 1,
     shadowBlur: 3,
+    shadowOffsetOnDrag: 1,
     shadowBlurOnDrag: 5,
     scaleOnDrag: 1.05,
   };
@@ -121,14 +117,14 @@ function Piece({
       }
       // scale on drag
       scaleX={
-        scale * (isDragging
-          ? styles.scaleOnDrag
-          : 1)
+        isDragging
+          ? scale * styles.scaleOnDrag
+          : scale * 1
       }
       scaleY={
-        scale * (isDragging
-          ? styles.scaleOnDrag
-          : 1)
+        isDragging
+          ? scale * styles.scaleOnDrag
+          : scale * 1
       }
       ref={pieceRef}
     />
@@ -139,8 +135,6 @@ Piece.propTypes = {
   pieceId: PropTypes.number.isRequired,
   gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
   handleGameChange: PropTypes.func.isRequired,
-  stageWidth: PropTypes.number.isRequired,
-  stageHeight: PropTypes.number.isRequired,
 };
 
 export default Piece;

@@ -1,4 +1,4 @@
-import getPiecesSet from "../components/utils/getPiecesSet";
+import getPiecesSet from "../models/getPiecesSet";
 
 describe('generate pieces', () => {
   it('generates pieces', () => {

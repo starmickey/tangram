@@ -12,8 +12,8 @@ function PlayingPage({ gameState, setGameState }) {
   return (
     <div className="playing-area-container">
       <PlayingArea
-        pwidth={0.8}
-        pheight={0.8}
+        percentageWidth={0.8}
+        percentageHeight={0.8}
         gameState={gameState}
         setGameState={setGameState}
       />

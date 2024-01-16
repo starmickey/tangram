@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
 import { getClampedPosition } from "./pieceMovement";
+import { useStageDimensions } from "../../contexts/StageContext";
 
 /**
  * Create all the necesary functions to enable
@@ -23,10 +23,17 @@ function useDragAndClick(
   setPiece,
   gameHandler,
   handleGameChange,
-  stageWidth,
-  stageHeight,
 ) {
+  // Validate inputs
+  if (!(gameHandler instanceof GameHandler)) {
+    throw new Error("gameHandler must be an instance of GameHandler");
+  }
+
+  // Hook for checking if the mouse is dragging
   const [isDragging, setIsDragging] = useState(false);
+  // Get the stage dimensions for clamping movements to keep the
+  // pieces within it
+  const stageDimensions = useStageDimensions();
 
   const handleDragStart = () => {
     setIsDragging(true);
@@ -44,8 +51,8 @@ function useDragAndClick(
       position.y,
       pieceWidth,
       pieceHeight,
-      stageWidth,
-      stageHeight,
+      stageDimensions.width,
+      stageDimensions.height,
     );
     return { x, y };
   };
@@ -87,7 +94,7 @@ function useDragAndClick(
     return () => {
       document.removeEventListener("dragover", handleDragOver, false);
     };
-  }, []); // Cleanup on unmount
+  }, [handleGameChange]); // Cleanup on unmount
 
   return {
     isDragging,
@@ -97,12 +104,5 @@ function useDragAndClick(
     handleClick,
   };
 }
-
-useDragAndClick.propTypes = {
-  pieceId: PropTypes.number.isRequired,
-  setPiece: PropTypes.func.isRequired,
-  gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
-  handleGameChange: PropTypes.func.isRequired,
-};
 
 export default useDragAndClick;
