@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useRef, useContext } from "react";
 import { Shape } from "react-konva";
 import GameHandler from "../controllers/GameHandler";
+import { ScaleContext } from "../contexts/ScaleContext";
 import useDragAndClick from "./utils/useDragAndClick";
 import getCorners from "./utils/getCornersStrategy";
-import { scale } from "./utils/constants";
 
 /**
  * Renders a dynamic piece component
@@ -18,29 +18,48 @@ function Piece({
   pieceId,
   gameHandler,
   handleGameChange,
+  stageWidth,
+  stageHeight,
 }) {
   // Validate inputs
-  if (pieceId < 0) {
+  if (
+    typeof pieceId !== "number"
+    || pieceId < 0
+  ) {
     throw new Error("Invalid input parameters");
   }
 
   // Get actual piece state from Game Handler
   const pieceDTO = gameHandler.getPieceDTO(pieceId);
-  // Create piece status hook
+  // Create a status hook for the GameHandler piece state
   const [piece, setPiece] = useState(pieceDTO);
+  // Create a piece reference for the react konva piece shape component
+  const pieceRef = useRef();
+
+  // Get scale from context
+  const scale = useContext(ScaleContext);
 
   // Get events handlers
   const {
     isDragging,
     handleDragStart,
+    handleDragBound,
     handleDragEnd,
     handleClick,
-  } = useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange);
+  } = useDragAndClick(
+    pieceId,
+    pieceRef,
+    setPiece,
+    gameHandler,
+    handleGameChange,
+    stageWidth,
+    stageHeight,
+  );
 
   // Custom pieces styles
   const styles = {
     fill: "#00D2FF",
-    stroke: ":#000000",
+    stroke: "#000000",
     strokeWidth: 0.1,
     shadowOffset: 0.5,
     shadowOffsetOnDrag: 1,
@@ -74,6 +93,7 @@ function Piece({
       // events handling
       draggable
       onDragStart={handleDragStart}
+      dragBoundFunc={handleDragBound}
       onDragEnd={handleDragEnd}
       onClick={handleClick}
       // format
@@ -86,18 +106,18 @@ function Piece({
       // shadow
       shadowOffsetX={
         isDragging
-          ? styles.shadowOffset
-          : styles.shadowOffsetOnDrag
+          ? styles.shadowOffsetOnDrag
+          : styles.shadowOffset
       }
       shadowOffsetY={
         isDragging
-          ? styles.shadowOffset
-          : styles.shadowOffsetOnDrag
+          ? styles.shadowOffsetOnDrag
+          : styles.shadowOffset
       }
       shadowBlur={
         isDragging
-          ? styles.shadowBlur
-          : styles.shadowBlurOnDrag
+          ? styles.shadowBlurOnDrag
+          : styles.shadowBlur
       }
       // scale on drag
       scaleX={
@@ -110,6 +130,7 @@ function Piece({
           ? styles.scaleOnDrag
           : 1)
       }
+      ref={pieceRef}
     />
   );
 }
@@ -118,6 +139,8 @@ Piece.propTypes = {
   pieceId: PropTypes.number.isRequired,
   gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
   handleGameChange: PropTypes.func.isRequired,
+  stageWidth: PropTypes.number.isRequired,
+  stageHeight: PropTypes.number.isRequired,
 };
 
 export default Piece;

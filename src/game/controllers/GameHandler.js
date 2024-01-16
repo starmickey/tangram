@@ -68,7 +68,7 @@ class GameHandler {
     return this.pieces.map((piece) => GameHandler.#pieceToPieceDTO(piece));
   }
 
-  movePiece(pieceId, diffX, diffY) {
+  setPiecePosition(pieceId, x, y) {
     // Get piece by its id
     const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
 
@@ -82,10 +82,7 @@ class GameHandler {
 
     // Move piece
     const piece = filteredPieces[0];
-    piece.setPosition(
-      piece.x + diffX,
-      piece.y + diffY,
-    );
+    piece.setPosition(x, y);
   }
 
   /**
@@ -93,7 +90,7 @@ class GameHandler {
    * @param {number} pieceId - the piece unique identifier
    * @param {number} diffA - the difference between the last angle and the new one
    */
-  rotatePiece(pieceId, diffA) {
+  setPieceRotation(pieceId, a) {
     // Get piece by its id
     const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
 
@@ -107,7 +104,7 @@ class GameHandler {
 
     // Rotate piece
     const piece = filteredPieces[0];
-    const newA = (piece.a + diffA) % 360;
+    const newA = a % 360;
     piece.setA(newA);
   }
 

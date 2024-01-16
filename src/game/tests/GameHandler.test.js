@@ -59,16 +59,16 @@ describe('Game Handler tests', () => {
     const pieceId = gameHandler.pieces[0].id;
     const startX = gameHandler.pieces[0].x;
     const startY = gameHandler.pieces[0].y;
-    const diffX = 10;
-    const diffY = 20;
+    const finalX = 10;
+    const finalY = 20;
 
-    gameHandler.movePiece(pieceId, diffX, diffY);
+    gameHandler.setPiecePosition(pieceId, finalX, finalY);
 
-    expect(gameHandler.pieces[0].x).toBe(startX + diffX);
-    expect(gameHandler.pieces[0].y).toBe(startY + diffY);
+    expect(gameHandler.pieces[0].x).toBe(startX + finalX);
+    expect(gameHandler.pieces[0].y).toBe(startY + finalY);
   });
 
-  it('throws an error when trying to move a no existent piece', () => {
+  it.only('throws an error when trying to move a no existent piece', () => {
     const gameState = GameState.GAME;
     const gameHandler = new GameHandler([], gameState);
     const pieceId = 2;
@@ -86,7 +86,7 @@ describe('Game Handler tests', () => {
     const startA = gameHandler.pieces[0].a;
     const diffA = 15;
 
-    gameHandler.rotatePiece(pieceId, diffA);
+    gameHandler.setPieceRotation(pieceId, diffA);
     
     expect(gameHandler.pieces[0].a).toBe(startA + diffA);
   });

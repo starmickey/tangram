@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import { Group, Shape } from "react-konva";
 import SolutionHandler from "../controllers/SolutionHandler";
 import getCorners from "./utils/getCornersStrategy";
-import { scale } from "./utils/constants";
+// import { scale } from "./utils/constants";
+import { ScaleContext } from "../contexts/ScaleContext";
 
 /**
  * Renders the solution shadow
@@ -9,6 +11,9 @@ import { scale } from "./utils/constants";
  */
 
 function Solution() {
+  // Get scale from context
+  const scale = useContext(ScaleContext);
+
   const solutionHandler = new SolutionHandler();
   const solutionDTO = solutionHandler.getSolutionDTO();
   const spDTOs = solutionDTO.pieces;

@@ -1,5 +1,3 @@
-import { GRID_UNIT } from "./constants";
-
 /**
  * Clamps the position within the specified container boundaries.
  * @param {number} x - X-coordinate of the position.
@@ -45,80 +43,6 @@ export function getClampedPosition(
 }
 
 /**
- * Rounds the position to the nearest grid unit.
- * This is meant to make easier dragging to the
- * solution positions.
- * @param {number} x - X-coordinate of the position.
- * @param {number} y - Y-coordinate of the position.
- * @param {number} scale - Screen scale
- * @returns {Object} - Gridded position {x, y}.
- */
-
-export function getGriddedPosition(x, y, scale = 1) {
-  // Validate input parameters
-  if (
-    typeof x !== "number"
-    || typeof y !== "number"
-    || typeof scale !== "number"
-  ) {
-    throw new Error("Invalid input parameters.");
-  }
-  // Calculate grid unit
-  const gridUnit = Math.round(GRID_UNIT * scale);
-  // Round to gridunit
-  return {
-    x: Math.round(x / gridUnit) * gridUnit,
-    y: Math.round(y / gridUnit) * gridUnit,
-  };
-}
-
-export function getPiecePosition(
-  x,
-  y,
-  targetWidth,
-  targetHeight,
-  containerWidth,
-  containerHeight,
-) {
-  if (
-    typeof targetWidth !== "number"
-    || typeof targetHeight !== "number"
-    || typeof containerWidth !== "number"
-    || typeof containerHeight !== "number"
-    || targetWidth < 0
-    || targetHeight < 0
-    || containerWidth < 0
-    || containerHeight < 0
-  ) {
-    throw new Error("Invalid input parameters");
-  }
-
-  const centerX = containerWidth / 2;
-  const centerY = containerHeight / 2;
-  const centeredPosition = getPositionRelativeToCenter(x, y, centerX, centerY);
-  const clampedPosition = getClampedPosition(
-    centeredPosition.x,
-    centeredPosition.y,
-    targetWidth,
-    targetHeight,
-    containerWidth,
-    containerHeight,
-  );
-  // Round position to the grid unit
-  const griddedPosition = getGriddedPosition(
-    clampedPosition.x,
-    clampedPosition.y,
-  );
-
-  const newPosition = griddedPosition;
-
-  return {
-    x: newPosition.x,
-    y: newPosition.y,
-  };
-}
-
-/**
  * Generates a random position within the container boundaries.
  * @param {number} targetWidth - Width of the target object.
  * @param {number} targetHeight - Height of the target object.
@@ -158,12 +82,7 @@ export function getRandomPosition(
     containerWidth,
     containerHeight,
   );
-  // Round position to the grid unit
-  const griddedPosition = getGriddedPosition(
-    clampedPosition.x,
-    clampedPosition.y,
-  );
 
-  const { x, y } = griddedPosition;
+  const { x, y } = clampedPosition;
   return { x, y };
 }

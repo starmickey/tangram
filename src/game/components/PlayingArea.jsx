@@ -4,7 +4,7 @@ import Piece from "./Piece";
 import Solution from "./Solution";
 import GameHandler from "../controllers/GameHandler";
 import getPiecesSet from "../models/getPiecesSet";
-import { getRandomPosition } from "./utils/pieceMoving";
+import { getRandomPosition } from "./utils/pieceMovement";
 import "../styles/game.css";
 import GameState from "../objects/enum/GameState";
 
@@ -23,25 +23,27 @@ import GameState from "../objects/enum/GameState";
  */
 
 function PlayingArea({
-  pwidth,
-  pheight,
+  percentageWidth,
+  percentageHeight,
   gameState,
   setGameState,
 }) {
   // Validate inputs
+  const MIN_PERCENTAGE = 0;
+  const MAX_PERCENTAGE = 1;
   if (
-    pwidth < 0
-    || pheight < 0
-    || pwidth >= 1
-    || pheight >= 1
+    percentageWidth < MIN_PERCENTAGE
+    || percentageHeight < MIN_PERCENTAGE
+    || percentageWidth >= MAX_PERCENTAGE
+    || percentageHeight >= MAX_PERCENTAGE
   ) {
-    throw new Error("Invalid parameters. Pwidth and pheight must be between zero and one");
+    throw new Error(`Invalid parameters. Percentage width and height must be between ${MIN_PERCENTAGE} and ${MAX_PERCENTAGE}`);
   }
 
   // Calculate stage dimensions in pixels
-  const stageWidth = window.innerWidth * pwidth;
-  const stageHeight = window.innerHeight * pheight;
-  // Get playing area styles package
+  const stageWidth = window.innerWidth * percentageWidth;
+  const stageHeight = window.innerHeight * percentageHeight;
+  // Get playing area styles
   const playingAreaStyle = {
     width: `${stageWidth}px`,
     height: `${stageHeight}px`,
@@ -90,6 +92,8 @@ function PlayingArea({
               pieceId={pieceId}
               gameHandler={gameHandler}
               handleGameChange={handleGameChange}
+              stageWidth={stageWidth}
+              stageHeight={stageHeight}
             />
           ))}
         </Layer>
@@ -99,8 +103,8 @@ function PlayingArea({
 }
 
 PlayingArea.propTypes = {
-  pwidth: PropTypes.number.isRequired,
-  pheight: PropTypes.number.isRequired,
+  percentageWidth: PropTypes.number.isRequired,
+  percentageHeight: PropTypes.number.isRequired,
   gameState: PropTypes.instanceOf(GameState).isRequired,
   setGameState: PropTypes.func.isRequired,
 };

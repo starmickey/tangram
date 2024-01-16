@@ -39,9 +39,9 @@ function getTriangleCorners(piece) {
   }
   // Get corners
   const corners = [
-    new CornerDTO(width / 2, 0),
-    new CornerDTO(width, height),
+    new CornerDTO(0, 0),
     new CornerDTO(0, height),
+    new CornerDTO(width, height),
   ];
   return corners;
 }

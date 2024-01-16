@@ -1,5 +1,4 @@
-import { GRID_UNIT } from "../components/utils/constants";
-import { getClampedPosition, getGriddedPosition, getRandomPosition } from "../components/utils/pieceMoving";
+import { getClampedPosition, getRandomPosition } from "../components/utils/pieceMovement";
 
 describe('piece poisition tests', () => { 
   it('clamps positions', () => {
@@ -24,14 +23,6 @@ describe('piece poisition tests', () => {
     expect(y).toBe(15);
   });  
 
-  it('gets a gridded position', () => {
-    const [startX, startY] = [11, 7];
-    const { x, y } = getGriddedPosition(startX, startY);
-
-    expect(x % GRID_UNIT).toBe(0);
-    expect(y % GRID_UNIT).toBe(0);
-  });
-
   it('gets valid random positions', () => {
     const targetWidth = 7;
     const targetHeight = 11;
@@ -47,11 +38,9 @@ describe('piece poisition tests', () => {
 
     expect(x).toBeDefined();
     expect(y).toBeDefined();
-    expect(x).toBeGreaterThanOrEqual(targetWidth / 2 - GRID_UNIT);
-    expect(y).toBeGreaterThanOrEqual(targetHeight / 2 - GRID_UNIT);
-    expect(x).toBeLessThanOrEqual(containerWidth - targetWidth / 2 + GRID_UNIT);
-    expect(y).toBeLessThanOrEqual(containerHeight - targetHeight / 2 + GRID_UNIT);
-    expect(x % GRID_UNIT).toBe(0);
-    expect(y % GRID_UNIT).toBe(0);   
+    expect(x).toBeGreaterThanOrEqual(targetWidth / 2);
+    expect(y).toBeGreaterThanOrEqual(targetHeight / 2);
+    expect(x).toBeLessThanOrEqual(containerWidth - targetWidth / 2);
+    expect(y).toBeLessThanOrEqual(containerHeight - targetHeight / 2);
   });
 })

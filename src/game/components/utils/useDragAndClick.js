@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import GameHandler from "../../controllers/GameHandler";
-import { getClampedPosition, getGriddedPosition } from "./pieceMoving";
+import { getClampedPosition } from "./pieceMovement";
 
 /**
  * Create all the necesary functions to enable
@@ -17,84 +17,65 @@ import { getClampedPosition, getGriddedPosition } from "./pieceMoving";
  * @returns {Object}
  */
 
-function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
-  const [dragState, setDragState] = useState({
-    isDragging: false,
-    // Mouse position; used to measure displacement
-    x: 0,
-    y: 0,
-  });
+function useDragAndClick(
+  pieceId,
+  pieceRef,
+  setPiece,
+  gameHandler,
+  handleGameChange,
+  stageWidth,
+  stageHeight,
+) {
+  const [isDragging, setIsDragging] = useState(false);
 
-  /* It turns some position to a valid one
-  * A valid position in one which ensures the figure
-  * has not been dragged outside the parent component bounds
-  * And which applies the grid principle
-  * */
-  const getPositionFromEvent = (e) => {
-    // Get mouse position
-    const { x, y } = e.target.position();
-    // Get the stage dimensions
-    const stageWidth = e.target.getStage().width();
-    const stageHeight = e.target.getStage().height();
-    // Get the target dimensions
-    const targetWidth = e.target.width();
-    const targetHeight = e.target.height();
-    // Clamp position to keep it inside the stage
-    const clampedPosition = getClampedPosition(
-      x,
-      y,
-      targetWidth,
-      targetHeight,
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragBound = (position) => {
+    // Calculate the boundaries based on the rotated figure's
+    // position and dimensions
+    const pieceClientRect = pieceRef.current.getClientRect();
+    const pieceWidth = pieceClientRect.width;
+    const pieceHeight = pieceClientRect.height;
+    // Clamp the position within the stage boundaries
+    const { x, y } = getClampedPosition(
+      position.x,
+      position.y,
+      pieceWidth,
+      pieceHeight,
       stageWidth,
       stageHeight,
     );
-    // Round position values to grid unit
-    return getGriddedPosition(
-      clampedPosition.x,
-      clampedPosition.y,
-    );
+    return { x, y };
   };
 
-  // EVENT HANDLING FUNCTIONS
-
-  const handleDragStart = (e) => {
-    const { x, y } = getPositionFromEvent(e);
-    setDragState({ isDragging: true, x, y });
-  };
-
-  const handleDragEnd = (e) => {
-    if (dragState.isDragging) {
-      // Clamp position to keep it inside the stage
-      const { x, y } = getPositionFromEvent(e);
-      // Get mouse displacement since drag start
-      const diffX = x - dragState.x;
-      const diffY = y - dragState.y;
+  const handleDragEnd = () => {
+    if (isDragging) {
+      // Get the target position
+      const x = pieceRef.current.x();
+      const y = pieceRef.current.y();
       // Update controller state
-      gameHandler.movePiece(pieceId, diffX, diffY);
-      // Rerender piece
-      const pieceDTO = gameHandler.getPieceDTO(pieceId);
-      e.target.position({ x: pieceDTO.x, y: pieceDTO.y });
-      e.target.getLayer().batchDraw();
+      gameHandler.setPiecePosition(pieceId, x, y);
       // parent component actions
       handleGameChange();
     }
-    setDragState({
-      ...dragState,
-      isDragging: false,
-    });
+    setIsDragging(false);
   };
 
   const handleClick = () => {
-    if (!dragState.isDragging) {
+    if (!isDragging) {
+      // Get the target rotation
+      const a = pieceRef.current.rotation();
+      // Get the new angle
+      const newA = a + 45;
       // update controller state
-      gameHandler.rotatePiece(pieceId, 45);
+      gameHandler.setPieceRotation(pieceId, newA);
       // rerender piece
       const pieceDTO = gameHandler.getPieceDTO(pieceId);
       setPiece(pieceDTO);
       // parent component actions
       handleGameChange();
-      const { x, y } = pieceDTO;
-      console.log(`x: ${x} y:${y}`);
     }
   };
 
@@ -102,17 +83,16 @@ function useDragAndClick(pieceId, setPiece, gameHandler, handleGameChange) {
     const handleDragOver = (event) => {
       event.preventDefault();
     };
-
     document.addEventListener("dragover", handleDragOver, false);
-
     return () => {
       document.removeEventListener("dragover", handleDragOver, false);
     };
   }, []); // Cleanup on unmount
 
   return {
-    isDragging: dragState.isDragging,
+    isDragging,
     handleDragStart,
+    handleDragBound,
     handleDragEnd,
     handleClick,
   };
