@@ -2,6 +2,7 @@ import Piece from "../objects/data/Piece";
 import PieceDTO from "../objects/dto/PieceDTO";
 import GameState from "../objects/enum/GameState";
 import PieceType from "../objects/enum/PieceType";
+import SolutionHandler from "./SolutionHandler";
 
 class GameHandler {
   /**
@@ -20,6 +21,7 @@ class GameHandler {
     // Assign attributes
     this.pieces = pieces.map((piece) => GameHandler.#pieceDTOtoPiece(piece));
     this.state = state;
+    this.solutionHandler = new SolutionHandler();
   }
 
   static #pieceDTOtoPiece(pieceDTO) {
@@ -102,10 +104,17 @@ class GameHandler {
       throw new Error(`more than one piece was found with id ${pieceId}`);
     }
 
-    // Rotate piece
     const piece = filteredPieces[0];
-    const newA = a % 360;
-    piece.setA(newA);
+
+    // Rotate piece
+    if (piece.type.id === PieceType.PARALLELOGRAM.id) {
+      // A parallelogram looks the same at 0 and at 180 degrees
+      // So we reduce the range of its angles to make solution checking
+      // easier
+      piece.setA(a % 180);
+    } else {
+      piece.setA(a % 360);
+    }
   }
 
   getState() {
@@ -114,6 +123,18 @@ class GameHandler {
 
   getPiecesIds() {
     return this.pieces.map((piece) => piece.id);
+  }
+
+  getSolutionDTO() {
+    return this.solutionHandler.getSolutionDTO();
+  }
+
+  markPieceAsSolved(pieceId) {
+    this.solutionHandler.markPieceAsSolved(pieceId);
+
+    if (this.solutionHandler.isGameSolved()) {
+      this.state = GameState.WIN;
+    }
   }
 }
 

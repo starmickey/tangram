@@ -1,7 +1,7 @@
 import PieceType from "../enum/PieceType";
 
 export default class Piece {
-  static nextId = 0;
+  static nextId = 1;
 
   /**
    * Create a new Piece object

@@ -12,7 +12,7 @@ export default class SolutionDTO {
       solutionPieces.filter((s) => !(s instanceof SolutionPieceDTO)).length > 0
       || solutionPieces.length === 0
     ) {
-      throw new Error("solution pieces inputs have invalid types");
+      throw new Error("solution piece array elements have invalid types or array is empty");
     }
     // Assign attributes
     this.id = id;

@@ -1,7 +1,7 @@
 import SolutionPiece from "./SolutionPiece";
 
 export default class Solution {
-  static nextId = 0;
+  static nextId = 1;
 
   /**
    * Create a new Solution object

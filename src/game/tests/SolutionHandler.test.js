@@ -21,4 +21,47 @@ describe('Solution Handler', () => {
 
     expect(solutionDTO).toBeInstanceOf(SolutionDTO);
   });
+
+  it('marks solved pieces', () => {
+    const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);
+    const sp2 = new SolutionPiece(PieceType.SQUARE, 20, 20, 45);
+    const pieces = [sp1, sp2];
+    const solution = new Solution(pieces);
+    const solutionStatus = new SolutionHandler(solution);
+
+    solutionStatus.markPieceAsSolved(sp1.id);
+    expect(solutionStatus.solvedIds).toContain(sp1.id);
+  });
+
+  it('doesnt mark solved pieces twice', () => {
+    const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);
+    const pieces = [sp1];
+    const solution = new Solution(pieces);
+    const solutionStatus = new SolutionHandler(solution);
+
+    solutionStatus.markPieceAsSolved(sp1.id);
+    solutionStatus.markPieceAsSolved(sp1.id);
+    expect(solutionStatus.solvedIds.length).toBe(1);
+  });
+
+  it('throws error if trying to mark a piece as solved that isnt in the solution', () => {
+    const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);
+    const pieces = [sp1];
+    const solution = new Solution(pieces);
+    const solutionStatus = new SolutionHandler(solution);
+
+    expect(() => {
+      solutionStatus.markPieceAsSolved(sp1.id + 10);
+    }).toThrow(Error);
+  });
+
+  it('checks if game is solved', () => {
+    const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);
+    const pieces = [sp1];
+    const solution = new Solution(pieces);
+    const sh = new SolutionHandler(solution);
+    sh.solvedIds.push(sp1.id);
+    
+    expect(sh.isGameSolved()).toBe(true);
+  });
 })

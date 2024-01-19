@@ -1,5 +1,6 @@
 import { Group, Shape } from "react-konva";
-import SolutionHandler from "../controllers/SolutionHandler";
+import PropTypes from "prop-types";
+import SolutionDTO from "../objects/dto/SolutionDTO";
 import getCorners from "./utils/getCornersStrategy";
 import { useScaleState } from "../contexts/StageContext";
 
@@ -8,12 +9,10 @@ import { useScaleState } from "../contexts/StageContext";
  * @returns {Group} - a group of shapes
  */
 
-function Solution() {
+function Solution({ solutionDTO }) {
   // Get scale from context
   const scale = useScaleState();
 
-  const solutionHandler = new SolutionHandler();
-  const solutionDTO = solutionHandler.getSolutionDTO();
   const spDTOs = solutionDTO.pieces;
 
   return (
@@ -23,7 +22,11 @@ function Solution() {
           key={sp.id}
           sceneFunc={(context, shape) => {
             // Get points DTOs
-            const corners = getCorners(sp);
+            const corners = getCorners(
+              sp.typeId,
+              sp.width,
+              sp.height,
+            );
             const lastCorner = corners[corners.length - 1];
             // Draw figure
             context.beginPath();
@@ -52,5 +55,9 @@ function Solution() {
     </Group>
   );
 }
+
+Solution.propTypes = {
+  solutionDTO: PropTypes.instanceOf(SolutionDTO).isRequired,
+};
 
 export default Solution;

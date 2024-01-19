@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import GameHandler from "../../controllers/GameHandler";
-import { getClampedPosition } from "./pieceMovement";
+import { getClampedPosition, getSolutionPieceToSnap } from "./pieceMovement";
 import { useStageDimensions } from "../../contexts/StageContext";
 
 /**
@@ -16,7 +16,6 @@ import { useStageDimensions } from "../../contexts/StageContext";
  * was dragged to the right position, solving the whole puzzle.
  * @returns {Object}
  */
-
 function useDragAndClick(
   pieceId,
   pieceRef,
@@ -62,8 +61,25 @@ function useDragAndClick(
       // Get the target position
       const x = pieceRef.current.x();
       const y = pieceRef.current.y();
-      // Update controller state
-      gameHandler.setPiecePosition(pieceId, x, y);
+      // If it's close to a position of the solution
+      // snap the piece to it
+      const pieceDTO = gameHandler.getPieceDTO(pieceId);
+      pieceDTO.setPosition(x, y);
+      const solutionDTO = gameHandler.getSolutionDTO();
+      const spDTO = getSolutionPieceToSnap(pieceDTO, solutionDTO);
+
+      if (spDTO !== null) {
+        // snap piece to solution hole
+        pieceRef.current.x(spDTO.x);
+        pieceRef.current.y(spDTO.y);
+        // Update controller state
+        gameHandler.setPiecePosition(pieceId, spDTO.x, spDTO.y);
+        gameHandler.markPieceAsSolved(pieceId);
+      } else {
+        // Update controller state
+        gameHandler.setPiecePosition(pieceId, x, y);
+      }
+
       // parent component actions
       handleGameChange();
     }

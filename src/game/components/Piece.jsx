@@ -68,7 +68,11 @@ function Piece({
     <Shape
       // Draw the piece
       sceneFunc={(context, shape) => {
-        const corners = getCorners(piece);
+        const corners = getCorners(
+          piece.typeId,
+          piece.width,
+          piece.height,
+        );
         const lastCorner = corners[corners.length - 1];
         context.beginPath();
         context.moveTo(lastCorner.x, lastCorner.y);

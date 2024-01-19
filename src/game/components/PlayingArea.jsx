@@ -86,6 +86,8 @@ function PlayingArea({
 
   // Get piece unique keys
   const piecesIds = gameHandler.getPiecesIds();
+  // Get the solution DTO
+  const solutionDTO = gameHandler.getSolutionDTO();
 
   // Create piece components
   return (
@@ -94,7 +96,7 @@ function PlayingArea({
         <Stage width={stageWidth} height={stageHeight} id="stage">
           <Layer>
             {/* Render the solution shadow */}
-            <Solution />
+            <Solution solutionDTO={solutionDTO} />
           </Layer>
           <Layer>
             {/* Render interactive pieces */}

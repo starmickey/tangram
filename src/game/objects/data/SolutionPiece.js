@@ -1,7 +1,7 @@
 import PieceType from "../enum/PieceType";
 
 export default class SolutionPiece {
-  static nextId = 0;
+  static nextId = 1;
 
   /**
    * Position of the piece when the puzzle is solved
