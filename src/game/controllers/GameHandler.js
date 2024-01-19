@@ -1,6 +1,7 @@
 import Piece from "../objects/data/Piece";
+import SolutionPiece from "../objects/data/SolutionPiece";
 import PieceDTO from "../objects/dto/PieceDTO";
-import GameState from "../objects/enum/GameState";
+// import GameState from "../objects/enum/GameState";
 import PieceType from "../objects/enum/PieceType";
 import SolutionHandler from "./SolutionHandler";
 
@@ -10,27 +11,28 @@ class GameHandler {
    * @param {PieceDTO} pieces - interactive pieces
    * @param {GameState} state - start game state
    */
-  constructor(pieces, state) {
+  constructor() {
     // Validate inputs
-    if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
-      throw new Error("piece inputs have invalid types");
-    }
-    if (!(state instanceof GameState)) {
-      throw new Error("game state has an invalid type");
-    }
+    // if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
+    //   throw new Error("piece inputs have invalid types");
+    // }
+    // if (!(state instanceof GameState)) {
+    //   throw new Error("game state has an invalid type");
+    // }
     // Assign attributes
-    this.pieces = pieces.map((piece) => GameHandler.#pieceDTOtoPiece(piece));
-    this.state = state;
+    // this.pieces = pieces.map((piece) => GameHandler.#pieceDTOtoPiece(piece));
     this.solutionHandler = new SolutionHandler();
+    // Create a default pieces set from solution
+    const solutionPieces = this.solutionHandler.solution.pieces;
+    this.pieces = solutionPieces.map((sp) => GameHandler.#solutionPieceToPiece(sp));
   }
 
-  static #pieceDTOtoPiece(pieceDTO) {
-    return new Piece(
-      PieceType.getPieceType(pieceDTO.typeId),
-      pieceDTO.x,
-      pieceDTO.y,
-      pieceDTO.a,
-    );
+  static #solutionPieceToPiece(solutionPiece) {
+    if (!(solutionPiece instanceof SolutionPiece)) {
+      throw new Error("argument must be a Solution Piece instance");
+    }
+
+    return new Piece(solutionPiece.type);
   }
 
   static #pieceToPieceDTO(piece) {
@@ -117,10 +119,6 @@ class GameHandler {
     }
   }
 
-  getState() {
-    return this.state;
-  }
-
   getPiecesIds() {
     return this.pieces.map((piece) => piece.id);
   }
@@ -131,10 +129,10 @@ class GameHandler {
 
   markPieceAsSolved(pieceId) {
     this.solutionHandler.markPieceAsSolved(pieceId);
+  }
 
-    if (this.solutionHandler.isGameSolved()) {
-      this.state = GameState.WIN;
-    }
+  isGameSolved() {
+    return this.solutionHandler.isGameSolved();
   }
 }
 

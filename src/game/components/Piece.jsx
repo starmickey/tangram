@@ -7,24 +7,20 @@ import useDragAndClick from "./utils/useDragAndClick";
 import getCorners from "./utils/getCornersStrategy";
 
 /**
- * Renders a dynamic piece component
- * @param {number} pieceId - unique piece id
- * @param {number} gameHandler - its passed because if the
- * piece state changes, it must be updated on the gameHandler
- * @param {func} handleGameChange - changes the parent compoment state
+ * Renders an interactive piece component.
+ * @param {number} pieceId - The unique identifier of the piece.
+ * @param {number} gameHandler - Controller used to update the game state.
+ * @param {func} handleGameChange - Function to change the game state if necessary.
  */
 
 function Piece({
   pieceId,
   gameHandler,
-  handleGameChange,
+  handleGameSolved,
 }) {
   // Validate inputs
-  if (typeof pieceId !== "number" || pieceId < 0) {
+  if (pieceId < 0) {
     throw new Error(`PieceId ${pieceId} is invalid. It must be a non-negative number`);
-  }
-  if (!gameHandler) {
-    throw new Error(`gameHandler ${gameHandler} is invalid`);
   }
 
   // Get actual piece state from Game Handler
@@ -49,10 +45,10 @@ function Piece({
     pieceRef,
     setPiece,
     gameHandler,
-    handleGameChange,
+    handleGameSolved,
   );
 
-  // Custom pieces styles
+  // Create custom styles
   const styles = {
     fill: "#00D2FF",
     stroke: "#000000",
@@ -138,7 +134,7 @@ function Piece({
 Piece.propTypes = {
   pieceId: PropTypes.number.isRequired,
   gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
-  handleGameChange: PropTypes.func.isRequired,
+  handleGameSolved: PropTypes.func.isRequired,
 };
 
 export default Piece;

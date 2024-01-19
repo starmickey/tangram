@@ -4,31 +4,27 @@ import { Stage, Layer } from "react-konva";
 import Piece from "./Piece";
 import Solution from "./Solution";
 import GameHandler from "../controllers/GameHandler";
-import GameState from "../objects/enum/GameState";
-import getPiecesSet from "../models/getPiecesSet";
 import { StageDimensionsCtx } from "../contexts/StageContext";
 import { getRandomPosition } from "./utils/pieceMovement";
 import "../styles/game.css";
 
 /**
- * Creates and styles the "playing area".
- * Creates the seven default pieces.
- * Creates the gameHandler to enable puzzle solution checking.
- * Updates the game state if the puzzle was solved.
+ * Creates and styles the "playing area" which contains the solution hole
+ * and interactive pieces.
  * @param {number} percentageWidth - Porcentual-width of the playing area
  * respect the window width.
- * @param {number} percentageHeight - Porcentual height of the playing area.
- * @param {GameState} gameState - Hook State of the parent component.
- * This will rerender the page if the puzzle state changes. This will
- * happen when the puzzle is solved.
- * @param {function} setGameState - sets the gameState hook
+ * @param {number} percentageHeight - Porcentual height of the playing area
+ * respect the window width.
+ * @param {GameHandler} gameHandler - Controller that enables solution checking.
+ * @param {function} handleGameSolved - Function to rerender the page if puzzle.
+ * is solved.
  */
 
 function PlayingArea({
   percentageWidth,
   percentageHeight,
-  gameState,
-  setGameState,
+  gameHandler,
+  handleGameSolved,
 }) {
   // Validate inputs
   const MIN_PERCENTAGE = 0;
@@ -40,10 +36,6 @@ function PlayingArea({
     || percentageHeight >= MAX_PERCENTAGE
   ) {
     throw new Error(`Invalid parameters. Percentage width and height must be between ${MIN_PERCENTAGE} and ${MAX_PERCENTAGE}`);
-  }
-
-  if (!(gameState instanceof GameState)) {
-    throw new Error(`game state ${gameState} must be an instance of GameState`);
   }
 
   // Calculate stage dimensions in pixels
@@ -60,9 +52,8 @@ function PlayingArea({
     height: `${stageHeight}px`,
   };
 
-  // Get default pieces
-  const pieces = getPiecesSet();
   // Set random positions for the pieces
+  const pieces = gameHandler.getPiecesDTOs();
   pieces.forEach((piece) => {
     const { x, y } = getRandomPosition(
       piece.width,
@@ -70,19 +61,8 @@ function PlayingArea({
       stageWidth,
       stageHeight,
     );
-    piece.setPosition(x, y);
+    gameHandler.setPiecePosition(piece.id, x, y);
   });
-
-  // Initialize the game handler
-  const gameHandler = new GameHandler(pieces, gameState);
-
-  // If a child changes game state, update the parent component
-  const handleGameChange = () => {
-    // here'll go all functions common to all piece action
-
-    // it lets GamePage to know if the puzzle was solved
-    setGameState(gameHandler.getState());
-  };
 
   // Get piece unique keys
   const piecesIds = gameHandler.getPiecesIds();
@@ -105,7 +85,7 @@ function PlayingArea({
                 key={pieceId}
                 pieceId={pieceId}
                 gameHandler={gameHandler}
-                handleGameChange={handleGameChange}
+                handleGameSolved={handleGameSolved}
               />
             ))}
           </Layer>
@@ -118,8 +98,8 @@ function PlayingArea({
 PlayingArea.propTypes = {
   percentageWidth: PropTypes.number.isRequired,
   percentageHeight: PropTypes.number.isRequired,
-  gameState: PropTypes.instanceOf(GameState).isRequired,
-  setGameState: PropTypes.func.isRequired,
+  gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
+  handleGameSolved: PropTypes.func.isRequired,
 };
 
 export default PlayingArea;

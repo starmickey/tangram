@@ -1,28 +1,35 @@
 import PropTypes from "prop-types";
 import PlayingArea from "../../components/PlayingArea";
 import GameState from "../../objects/enum/GameState";
+import GameHandler from "../../controllers/GameHandler";
 
 /**
  * Set the window displayed when we are playing
- * @param {GameState} gameState - get parent state
  * @param {func} setGameState - set parent state
  * @returns {div}
  */
-function PlayingPage({ gameState, setGameState }) {
+function PlayingPage({ setGameState }) {
+  // Create game controller
+  const gameHandler = new GameHandler();
+
+  // Function for rerendering the page when puzzle is solved
+  const handleGameSolved = () => {
+    setGameState(GameState.WIN);
+  };
+
   return (
     <div className="playing-area-container">
       <PlayingArea
         percentageWidth={0.8}
         percentageHeight={0.8}
-        gameState={gameState}
-        setGameState={setGameState}
+        gameHandler={gameHandler}
+        handleGameSolved={handleGameSolved}
       />
     </div>
   );
 }
 
 PlayingPage.propTypes = {
-  gameState: PropTypes.instanceOf(GameState).isRequired,
   setGameState: PropTypes.func.isRequired,
 };
 
