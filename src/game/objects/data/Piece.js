@@ -65,12 +65,11 @@ export default class Piece {
     if (
       typeof a !== "number"
       || a < 0
-      || a > 360
     ) {
-      throw new Error(`Invalid angle ${a}`);
+      throw new Error(`Invalid angle ${a}. It must be a non-negative number.`);
     }
 
     // Assign attributes
-    this.a = a;
+    this.a = a % this.type.getMaxAngle();
   }
 }

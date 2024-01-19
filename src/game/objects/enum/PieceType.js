@@ -2,15 +2,15 @@ export default class PieceType {
   static nextId = 0;
 
   // Default types
-  static STRIANGLE = new PieceType("striangle", 100, 100);
+  static STRIANGLE = new PieceType("striangle", 100, 100, 360);
 
-  static MTRIANGLE = new PieceType("mtriangle", 141, 141);
+  static MTRIANGLE = new PieceType("mtriangle", 141, 141, 360);
 
-  static LTRIANGLE = new PieceType("ltriangle", 200, 200);
+  static LTRIANGLE = new PieceType("ltriangle", 200, 200, 360);
 
-  static PARALLELOGRAM = new PieceType("parallelogram", 212, 71);
+  static PARALLELOGRAM = new PieceType("parallelogram", 212, 71, 180);
 
-  static SQUARE = new PieceType("square", 100, 100);
+  static SQUARE = new PieceType("square", 100, 100, 90);
 
   static #defaultTypes = [
     this.STRIANGLE,
@@ -20,11 +20,14 @@ export default class PieceType {
     this.SQUARE,
   ];
 
-  constructor(name, width, height) {
+  constructor(name, width = 0, height = 0, maxAngle = 0) {
     this.id = PieceType.#getNextId();
     this.name = name;
     this.width = width;
     this.height = height;
+    // Angles range is restricted to avoid figures that look
+    // the same and have different angles.
+    this.maxAngle = maxAngle;
   }
 
   // Generate unique ids
@@ -46,6 +49,10 @@ export default class PieceType {
 
     const pieceType = filterPieceTypes[0];
     return pieceType;
+  }
+
+  getMaxAngle() {
+    return this.maxAngle;
   }
 }
 

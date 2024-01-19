@@ -61,7 +61,7 @@ describe('Game Handler tests', () => {
   it('rotates pieces', () => {
     const gameHandler = new GameHandler();
     const pieceId = gameHandler.pieces[0].id;
-    const newA = 125;
+    const newA = 45;
     gameHandler.setPieceRotation(pieceId, newA);
     expect(gameHandler.pieces[0].a).toBe(newA);
   });

@@ -1,32 +1,26 @@
 import Piece from "../objects/data/Piece";
 import SolutionPiece from "../objects/data/SolutionPiece";
 import PieceDTO from "../objects/dto/PieceDTO";
-// import GameState from "../objects/enum/GameState";
-import PieceType from "../objects/enum/PieceType";
 import SolutionHandler from "./SolutionHandler";
 
 class GameHandler {
   /**
-   * Create a new GameHandler
-   * @param {PieceDTO} pieces - interactive pieces
-   * @param {GameState} state - start game state
+   * Controller that keeps the state of the puzzle
+   * and determines when its solved
    */
   constructor() {
-    // Validate inputs
-    // if (pieces.filter((piece) => !(piece instanceof PieceDTO)).length > 0) {
-    //   throw new Error("piece inputs have invalid types");
-    // }
-    // if (!(state instanceof GameState)) {
-    //   throw new Error("game state has an invalid type");
-    // }
-    // Assign attributes
-    // this.pieces = pieces.map((piece) => GameHandler.#pieceDTOtoPiece(piece));
     this.solutionHandler = new SolutionHandler();
-    // Create a default pieces set from solution
+    // Get the pieces of the solution generated
     const solutionPieces = this.solutionHandler.solution.pieces;
+    // This attribute will keep the pieces state
     this.pieces = solutionPieces.map((sp) => GameHandler.#solutionPieceToPiece(sp));
   }
 
+  /**
+   * Helps to get a Piece instance from a Solution Piece instance.
+   * @param {SolutionPiece} solutionPiece - A piece of the Solution
+   * @returns {Piece}
+   */
   static #solutionPieceToPiece(solutionPiece) {
     if (!(solutionPiece instanceof SolutionPiece)) {
       throw new Error("argument must be a Solution Piece instance");
@@ -35,6 +29,11 @@ class GameHandler {
     return new Piece(solutionPiece.type);
   }
 
+  /**
+   * Conversor that creates a piece from a pieceDTO
+   * @param {Piece} piece
+   * @returns {PieceDTO}
+   */
   static #pieceToPieceDTO(piece) {
     return new PieceDTO(
       piece.id,
@@ -68,10 +67,20 @@ class GameHandler {
     return GameHandler.#pieceToPieceDTO(piece);
   }
 
+  /**
+   * Get the PieceDTO of each piece
+   * @returns {Array}
+   */
   getPiecesDTOs() {
     return this.pieces.map((piece) => GameHandler.#pieceToPieceDTO(piece));
   }
 
+  /**
+   * Updates the piece with a new position
+   * @param {number} pieceId - Unique identifier of the piece.
+   * @param {number} x - X-coordinate of the new position.
+   * @param {number} y - Y-coordinate of the new position.
+   */
   setPiecePosition(pieceId, x, y) {
     // Get piece by its id
     const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
@@ -92,7 +101,7 @@ class GameHandler {
   /**
    * Rotate a gameHandler piece
    * @param {number} pieceId - the piece unique identifier
-   * @param {number} diffA - the difference between the last angle and the new one
+   * @param {number} a - its new angle
    */
   setPieceRotation(pieceId, a) {
     // Get piece by its id
@@ -107,30 +116,39 @@ class GameHandler {
     }
 
     const piece = filteredPieces[0];
-
-    // Rotate piece
-    if (piece.type.id === PieceType.PARALLELOGRAM.id) {
-      // A parallelogram looks the same at 0 and at 180 degrees
-      // So we reduce the range of its angles to make solution checking
-      // easier
-      piece.setA(a % 180);
-    } else {
-      piece.setA(a % 360);
-    }
+    // Update the piece with the new angle.
+    piece.setA(a);
   }
 
+  /**
+   * Get all the pieces ids
+   * @returns {Array}
+   */
   getPiecesIds() {
     return this.pieces.map((piece) => piece.id);
   }
 
+  /**
+   * Get a DTO of the solution
+   * @returns {SolutionDTO}
+   */
   getSolutionDTO() {
     return this.solutionHandler.getSolutionDTO();
   }
 
+  /**
+   * Tell gameHandler that a piece is been placed in the position
+   * of the solution.
+   * @param {number} pieceId - Unique identifier of the piece
+   */
   markPieceAsSolved(pieceId) {
     this.solutionHandler.markPieceAsSolved(pieceId);
   }
 
+  /**
+   * Checks if the puzzle has been solved.
+   * @returns {boolean}
+   */
   isGameSolved() {
     return this.solutionHandler.isGameSolved();
   }
