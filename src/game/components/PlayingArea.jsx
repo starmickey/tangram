@@ -56,12 +56,12 @@ function PlayingArea({
   const pieces = gameHandler.getPiecesDTOs();
   pieces.forEach((piece) => {
     const { x, y } = getRandomPosition(
-      piece.width,
-      piece.height,
+      piece.getWidth(),
+      piece.getHeight(),
       stageWidth,
       stageHeight,
     );
-    gameHandler.setPiecePosition(piece.id, x, y);
+    gameHandler.setPiecePosition(piece.getId(), x, y);
   });
 
   // Get piece unique keys

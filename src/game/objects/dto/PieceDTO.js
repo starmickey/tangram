@@ -1,4 +1,12 @@
 export default class PieceDTO {
+  #id;
+  #typeId;
+  #width;
+  #height;
+  #x;
+  #y;
+  #a;
+
   /**
    * Data Transfer Object for UI exchange with gameHandler
    * @param {number} id - unique identifier of the associated interactive piece
@@ -26,13 +34,40 @@ export default class PieceDTO {
       throw new Error("Invalid input parameters");
     }
 
-    this.id = id;
-    this.typeId = typeId;
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y;
-    this.a = a;
+    this.#id = id;
+    this.#typeId = typeId;
+    this.#width = width;
+    this.#height = height;
+    this.#x = x;
+    this.#y = y;
+    this.#a = a;
+  }
+
+  getId() {
+    return this.#id;
+  }
+
+  getTypeId() {
+    return this.#typeId;
+  }
+
+  getWidth() {
+    return this.#width;
+  }
+
+  getHeight() {
+    return this.#height;
+  }
+
+  getX() {
+    return this.#x;
+  }
+  getY() {
+    return this.#y;
+  }
+
+  getPosition() {
+    return { x: this.#x, y: this.#y };
   }
 
   /**
@@ -41,8 +76,12 @@ export default class PieceDTO {
    * @param {number} y - new Y-coordinate
    */
   setPosition(x, y) {
-    this.x = x;
-    this.y = y;
+    this.#x = x;
+    this.#y = y;
+  }
+
+  getA() {
+    return this.#a;
   }
 
   /**
@@ -50,6 +89,6 @@ export default class PieceDTO {
    * @param {number} a - new angle
    */
   setA(a) {
-    this.a = a;
+    this.#a = a;
   }
 }

@@ -13,41 +13,41 @@ function Solution({ solutionDTO }) {
   // Get scale from context
   const scale = useScaleState();
 
-  const spDTOs = solutionDTO.pieces;
+  const spDTOs = solutionDTO.getPieces();
 
   return (
     <Group>
       {spDTOs.map((sp) => (
         <Shape
-          key={sp.id}
+          key={sp.getId()}
           sceneFunc={(context, shape) => {
             // Get points DTOs
             const corners = getCorners(
-              sp.typeId,
-              sp.width,
-              sp.height,
+              sp.getTypeId(),
+              sp.getWidth(),
+              sp.getHeight(),
             );
             const lastCorner = corners[corners.length - 1];
             // Draw figure
             context.beginPath();
-            context.moveTo(lastCorner.x, lastCorner.y);
+            context.moveTo(lastCorner.getX(), lastCorner.getY());
             corners.forEach((c) => {
-              const { x, y } = c;
+              const { x, y } = c.getPosition();
               context.lineTo(x, y);
             });
             context.closePath();
             context.fillStrokeShape(shape);
           }}
           // position
-          x={sp.x}
-          y={sp.y}
-          rotation={sp.a}
+          x={sp.getX()}
+          y={sp.getY()}
+          rotation={sp.getA()}
           // dimensions
-          width={sp.width}
-          height={sp.height}
+          width={sp.getWidth()}
+          height={sp.getHeight()}
           // ensure it rotates around its center
-          offsetX={sp.width / 2}
-          offsetY={sp.height / 2}
+          offsetX={sp.getWidth() / 2}
+          offsetY={sp.getHeight() / 2}
           fill="grey"
           scale={{ x: scale, y: scale }}
         />

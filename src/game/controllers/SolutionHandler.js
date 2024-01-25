@@ -9,9 +9,13 @@ import Solution from "../objects/data/Solution";
 import SolutionPiece from "../objects/data/SolutionPiece";
 
 export default class SolutionHandler {
+  #solution;
+  // Keeps the ids of the pieces that are in the right place
+  #solvedIds = [];
+
   /**
    * Creates a new Solution Handler.
-   * @param {SolutionDTO} solution - The solution to be achieved.
+   * @param {Solution} solution - The solution to be achieved.
    *                                Defaults to the default solution obtained from getSolution().
    * @throws {Error} If the provided solution is not an instance of Solution.
    */
@@ -19,9 +23,24 @@ export default class SolutionHandler {
     if (!(solution instanceof Solution)) {
       throw new Error("Invalid input parameters: solution must be an instance of Solution");
     }
-    this.solution = solution;
-    // Keeps the ids of the pieces that are in the right place
-    this.solvedIds = [];
+    this.#solution = solution;
+  }
+
+  getSolution() {
+    return this.#solution;
+  }
+
+  /**
+   * Adds an id to the solvedIds array
+   * This must only be used for testing
+   * @param {number} id - solutionPiece unique identifier
+   */
+  addSolvedId(id) {
+    this.#solvedIds.push(id);
+  }
+
+  getSolvedIds() {
+    return this.#solvedIds;
   }
 
   /**
@@ -37,13 +56,13 @@ export default class SolutionHandler {
     }
 
     return new SolutionPieceDTO(
-      solutionPiece.id,
-      solutionPiece.type.id,
-      solutionPiece.type.width,
-      solutionPiece.type.height,
-      solutionPiece.x,
-      solutionPiece.y,
-      solutionPiece.a,
+      solutionPiece.getId(),
+      solutionPiece.getType().getId(),
+      solutionPiece.getType().getWidth(),
+      solutionPiece.getType().getHeight(),
+      solutionPiece.getX(),
+      solutionPiece.getY(),
+      solutionPiece.getA(),
     );
   }
 
@@ -52,7 +71,8 @@ export default class SolutionHandler {
    * @returns {SolutionDTO} - The SolutionDTO representing the current solution state.
    */
   getSolutionDTO() {
-    const { id, pieces } = this.solution;
+    const id = this.#solution.getId();
+    const pieces = this.#solution.getPieces();
     // Convert each SolutionPiece to SolutionPieceDTO
     const solutionPiecesDTO = pieces.map((p) => (
       SolutionHandler.#solutionPieceToSolutionPieceDTO(p)
@@ -69,12 +89,12 @@ export default class SolutionHandler {
    */
   markPieceAsSolved(id) {
     // Check if id is already in solvedIds array
-    const filteredSolvedIds = this.solvedIds.filter((si) => si === id);
+    const filteredSolvedIds = this.#solvedIds.filter((si) => si === id);
 
     // If it wasn't found save it
     if (filteredSolvedIds.length === 0) {
       // Check that there's a solution piece whose id is the one given
-      const filteredPieces = this.solution.pieces.filter((sp) => sp.id === id);
+      const filteredPieces = this.#solution.getPieces().filter((sp) => sp.getId() === id);
 
       // Error handling
       if (filteredPieces.length === 0) {
@@ -85,7 +105,7 @@ export default class SolutionHandler {
       }
 
       // Mark piece as solved
-      this.solvedIds.push(id);
+      this.#solvedIds.push(id);
     }
   }
 
@@ -94,6 +114,6 @@ export default class SolutionHandler {
    * @returns {boolean} - True if all pieces are solved, false otherwise.
    */
   isGameSolved() {
-    return this.solution.pieces.length === this.solvedIds.length;
+    return this.#solution.getPieces().length === this.#solvedIds.length;
   }
 }

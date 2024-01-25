@@ -8,8 +8,8 @@ describe('Solution Handler', () => {
   it('Creates a solution with default parameters', () => {
     const solutionHandler = new SolutionHandler();
 
-    expect(solutionHandler.solution).toBeDefined();
-    expect(solutionHandler.solution).toBeInstanceOf(Solution);
+    expect(solutionHandler.getSolution()).toBeDefined();
+    expect(solutionHandler.getSolution()).toBeInstanceOf(Solution);
   });
 
   it('gets a solution DTO', () => {
@@ -29,8 +29,8 @@ describe('Solution Handler', () => {
     const solution = new Solution(pieces);
     const solutionStatus = new SolutionHandler(solution);
 
-    solutionStatus.markPieceAsSolved(sp1.id);
-    expect(solutionStatus.solvedIds).toContain(sp1.id);
+    solutionStatus.markPieceAsSolved(sp1.getId());
+    expect(solutionStatus.getSolvedIds()).toContain(sp1.getId());
   });
 
   it('doesnt mark solved pieces twice', () => {
@@ -39,9 +39,9 @@ describe('Solution Handler', () => {
     const solution = new Solution(pieces);
     const solutionStatus = new SolutionHandler(solution);
 
-    solutionStatus.markPieceAsSolved(sp1.id);
-    solutionStatus.markPieceAsSolved(sp1.id);
-    expect(solutionStatus.solvedIds.length).toBe(1);
+    solutionStatus.markPieceAsSolved(sp1.getId());
+    solutionStatus.markPieceAsSolved(sp1.getId());
+    expect(solutionStatus.getSolvedIds().length).toBe(1);
   });
 
   it('throws error if trying to mark a piece as solved that isnt in the solution', () => {
@@ -51,7 +51,7 @@ describe('Solution Handler', () => {
     const solutionStatus = new SolutionHandler(solution);
 
     expect(() => {
-      solutionStatus.markPieceAsSolved(sp1.id + 10);
+      solutionStatus.markPieceAsSolved(sp1.getId() + 10);
     }).toThrow(Error);
   });
 
@@ -60,7 +60,7 @@ describe('Solution Handler', () => {
     const pieces = [sp1];
     const solution = new Solution(pieces);
     const sh = new SolutionHandler(solution);
-    sh.solvedIds.push(sp1.id);
+    sh.addSolvedId(sp1.getId());
     
     expect(sh.isGameSolved()).toBe(true);
   });

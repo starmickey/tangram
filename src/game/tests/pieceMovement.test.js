@@ -1,7 +1,8 @@
-import { getClampedPosition, getRandomPosition, getSolutionPieceToSnap, isClose } from "../components/utils/pieceMovement";
+import { getClampedPosition, getRandomPosition, getSolutionPieceToSnap, isClose, isSnappableToPiece } from "../components/utils/pieceMovement";
 import PieceDTO from "../objects/dto/PieceDTO";
 import SolutionDTO from "../objects/dto/SolutionDTO";
 import SolutionPieceDTO from "../objects/dto/SolutionPieceDTO";
+import PieceType from "../objects/enum/PieceType";
 
 describe('piece poisition tests', () => { 
   it('clamps positions', () => {

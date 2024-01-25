@@ -33,5 +33,6 @@ module.exports = {
   rules: {
     "linebreak-style": ["error", "windows"],
     quotes: ["error", "double"],
+    "lines-between-class-members": "off",
   },
 };

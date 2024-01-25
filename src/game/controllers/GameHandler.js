@@ -3,17 +3,32 @@ import SolutionPiece from "../objects/data/SolutionPiece";
 import PieceDTO from "../objects/dto/PieceDTO";
 import SolutionHandler from "./SolutionHandler";
 
+/**
+ * Controller that keeps the state of the puzzle
+ * and determines when its solved
+ */
 class GameHandler {
-  /**
-   * Controller that keeps the state of the puzzle
-   * and determines when its solved
-   */
+  // Used for solution checking
+  #solutionHandler;
+  // Keeps up to date positions of the interactive pieces
+  #pieces;
+
   constructor() {
-    this.solutionHandler = new SolutionHandler();
+    this.#solutionHandler = new SolutionHandler();
     // Get the pieces of the solution generated
-    const solutionPieces = this.solutionHandler.solution.pieces;
+    const solution = this.#solutionHandler.getSolution();
+    const solutionPieces = solution.getPieces();
     // This attribute will keep the pieces state
-    this.pieces = solutionPieces.map((sp) => GameHandler.#solutionPieceToPiece(sp));
+    this.#pieces = solutionPieces.map((sp) => GameHandler.#solutionPieceToPiece(sp));
+  }
+
+  getPieces() {
+    return this.#pieces;
+  }
+
+  getPiece(id) {
+    const piece = this.#pieces.find((p) => p.getId() === id);
+    return piece || null;
   }
 
   /**
@@ -26,7 +41,7 @@ class GameHandler {
       throw new Error("argument must be a Solution Piece instance");
     }
 
-    return new Piece(solutionPiece.type);
+    return new Piece(solutionPiece.getType());
   }
 
   /**
@@ -36,13 +51,13 @@ class GameHandler {
    */
   static #pieceToPieceDTO(piece) {
     return new PieceDTO(
-      piece.id,
-      piece.type.id,
-      piece.type.width,
-      piece.type.height,
-      piece.x,
-      piece.y,
-      piece.a,
+      piece.getId(),
+      piece.getType().getId(),
+      piece.getType().getWidth(),
+      piece.getType().getHeight(),
+      piece.getX(),
+      piece.getY(),
+      piece.getA(),
     );
   }
 
@@ -52,7 +67,7 @@ class GameHandler {
    * @returns {PieceDTO}
    */
   getPieceDTO(pieceId) {
-    const filteredPieces = this.pieces.filter((p) => (pieceId === p.id));
+    const filteredPieces = this.#pieces.filter((p) => (pieceId === p.getId()));
 
     // Error handling
     if (filteredPieces.length === 0) {
@@ -72,7 +87,7 @@ class GameHandler {
    * @returns {Array}
    */
   getPiecesDTOs() {
-    return this.pieces.map((piece) => GameHandler.#pieceToPieceDTO(piece));
+    return this.#pieces.map((piece) => GameHandler.#pieceToPieceDTO(piece));
   }
 
   /**
@@ -83,7 +98,7 @@ class GameHandler {
    */
   setPiecePosition(pieceId, x, y) {
     // Get piece by its id
-    const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
+    const filteredPieces = this.#pieces.filter((p) => p.getId() === pieceId);
 
     // Error handling
     if (filteredPieces.length === 0) {
@@ -105,7 +120,7 @@ class GameHandler {
    */
   setPieceRotation(pieceId, a) {
     // Get piece by its id
-    const filteredPieces = this.pieces.filter((p) => p.id === pieceId);
+    const filteredPieces = this.#pieces.filter((p) => p.getId() === pieceId);
 
     // Error handling
     if (filteredPieces.length === 0) {
@@ -125,7 +140,7 @@ class GameHandler {
    * @returns {Array}
    */
   getPiecesIds() {
-    return this.pieces.map((piece) => piece.id);
+    return this.#pieces.map((piece) => piece.getId());
   }
 
   /**
@@ -133,7 +148,7 @@ class GameHandler {
    * @returns {SolutionDTO}
    */
   getSolutionDTO() {
-    return this.solutionHandler.getSolutionDTO();
+    return this.#solutionHandler.getSolutionDTO();
   }
 
   /**
@@ -142,7 +157,7 @@ class GameHandler {
    * @param {number} pieceId - Unique identifier of the piece
    */
   markPieceAsSolved(pieceId) {
-    this.solutionHandler.markPieceAsSolved(pieceId);
+    this.#solutionHandler.markPieceAsSolved(pieceId);
   }
 
   /**
@@ -150,7 +165,7 @@ class GameHandler {
    * @returns {boolean}
    */
   isGameSolved() {
-    return this.solutionHandler.isGameSolved();
+    return this.#solutionHandler.isGameSolved();
   }
 }
 

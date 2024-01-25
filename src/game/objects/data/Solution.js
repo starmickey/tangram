@@ -1,7 +1,13 @@
 import SolutionPiece from "./SolutionPiece";
 
 export default class Solution {
-  static nextId = 1;
+  // Solution unique identifier
+  #id;
+  // Pieces that compose a solution
+  #pieces;
+
+  // Used for generating unique ids for each solution
+  static #nextId = 1;
 
   /**
    * Create a new Solution object
@@ -16,13 +22,21 @@ export default class Solution {
       throw new Error("solution pieces inputs have invalid types");
     }
     // Assign attributes
-    this.id = Solution.#getNextId();
-    this.pieces = pieces;
+    this.#id = Solution.#getNextId();
+    this.#pieces = pieces;
   }
 
   // Generate unique ids
   static #getNextId() {
-    this.nextId += 1;
-    return this.nextId;
+    this.#nextId += 1;
+    return this.#nextId;
+  }
+
+  getId() {
+    return this.#id;
+  }
+
+  getPieces() {
+    return this.#pieces;
   }
 }

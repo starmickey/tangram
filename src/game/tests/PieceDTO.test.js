@@ -9,13 +9,13 @@ describe("PieceDTO", () => {
   it("rotates piece", () => {
     const piece = new PieceDTO(0, 0, 10, 10);
     piece.setA(12);
-    expect(piece.a).toBe(12);
+    expect(piece.getA()).toBe(12);
   });
 
   it("moves the piece", () => {
     const piece = new PieceDTO(0, 0, 10, 10);
     piece.setPosition(1,2)
-    expect(piece.x).toBe(1);
-    expect(piece.y).toBe(2);
+    expect(piece.getX()).toBe(1);
+    expect(piece.getY()).toBe(2);
   })
 });

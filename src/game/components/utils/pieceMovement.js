@@ -100,7 +100,7 @@ export function getRandomPosition(
  * @param {number} y2 - Y coordinate of the second point.
  * @returns {boolean} - True if the points are close enough to snap, false otherwise.
  */
-function areSnappable(x1, y1, x2, y2) {
+function arePointsCloseToSnap(x1, y1, x2, y2) {
   const dx = x1 - x2;
   const dy = y1 - y2;
   const sqrdist = dx ** 2 + dy ** 2;
@@ -128,10 +128,15 @@ export function getSolutionPieceToSnap(pieceDTO, solutionDTO) {
   }
 
   // Find the snappable piece
-  const snappablePiece = solutionDTO.pieces.find((sp) => (
-    sp.typeId === pieceDTO.typeId
-    && sp.a === pieceDTO.a
-    && areSnappable(sp.x, sp.y, pieceDTO.x, pieceDTO.y)
+  const snappablePiece = solutionDTO.getPieces().find((sp) => (
+    sp.getTypeId() === pieceDTO.getTypeId()
+    && sp.getA() === pieceDTO.getA()
+    && arePointsCloseToSnap(
+      sp.getX(),
+      sp.getY(),
+      pieceDTO.getX(),
+      pieceDTO.getY(),
+    )
   ));
 
   return snappablePiece || null;

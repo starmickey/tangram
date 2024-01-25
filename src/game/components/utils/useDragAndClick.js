@@ -70,18 +70,19 @@ function useDragAndClick(
       // Get the target position
       const x = pieceRef.current.x();
       const y = pieceRef.current.y();
-      // Determine if it's close to a position hole and, if so, which one
+
+      // Determine if it's close to a solution hole and, if so, to which one
       const pieceDTO = gameHandler.getPieceDTO(pieceId);
       pieceDTO.setPosition(x, y);
       const solutionDTO = gameHandler.getSolutionDTO();
       const spDTO = getSolutionPieceToSnap(pieceDTO, solutionDTO);
-      // If is close to a position hole, snap it to it
+      // If is close to a solution hole, snap it to it
       if (spDTO !== null) {
         // snap piece to solution hole
-        pieceRef.current.x(spDTO.x);
-        pieceRef.current.y(spDTO.y);
+        pieceRef.current.x(spDTO.getX());
+        pieceRef.current.y(spDTO.getY());
         // Update controller with new position
-        gameHandler.setPiecePosition(pieceId, spDTO.x, spDTO.y);
+        gameHandler.setPiecePosition(pieceId, spDTO.getX(), spDTO.getY());
         // Tell controller that piece has been solved
         gameHandler.markPieceAsSolved(pieceId);
         // Check if game's been solved
@@ -119,10 +120,10 @@ function useDragAndClick(
       // If is close to a position hole, snap it to it
       if (spDTO !== null) {
         // snap piece to solution hole
-        pieceRef.current.x(spDTO.x);
-        pieceRef.current.y(spDTO.y);
+        pieceRef.current.x(spDTO.getX());
+        pieceRef.current.y(spDTO.getY());
         // Update controller with new position
-        gameHandler.setPiecePosition(pieceId, spDTO.x, spDTO.y);
+        gameHandler.setPiecePosition(pieceId, spDTO.getX(), spDTO.getY());
         // Tell controller that piece has been solved
         gameHandler.markPieceAsSolved(pieceId);
         // Check if game's been solved

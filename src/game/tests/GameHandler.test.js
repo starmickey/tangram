@@ -8,13 +8,13 @@ describe('Game Handler tests', () => {
     const gameHandler = new GameHandler();
 
     expect(gameHandler).toBeDefined();
-    expect(gameHandler.pieces.length).toBeGreaterThanOrEqual(0);
-    expect(gameHandler.pieces[0]).toBeInstanceOf(Piece);
+    expect(gameHandler.getPieces().length).toBeGreaterThanOrEqual(0);
+    expect(gameHandler.getPieces()[0]).toBeInstanceOf(Piece);
   });
 
   it('gets a piece DTO', () => {
     const gameHandler = new GameHandler();
-    const pieceId = gameHandler.pieces[0].id;
+    const pieceId = gameHandler.getPieces()[0].getId();
     const pieceReturned = gameHandler.getPieceDTO(pieceId);
     expect(pieceReturned).toBeDefined();
     expect(pieceReturned).toBeInstanceOf(PieceDTO);
@@ -33,20 +33,36 @@ describe('Game Handler tests', () => {
     expect(piecesReturned[0]).toBeInstanceOf(PieceDTO);
   });
 
+  it('gets a piece by id', () => {
+    const gameHandler = new GameHandler();
+    const piece = gameHandler.getPieces()[0];
+    const pieceId = piece.getId();
+    
+    expect(piece).toBeInstanceOf(Piece);
+    expect(pieceId).toBeDefined();
+
+    const searchedPiece = gameHandler.getPiece(pieceId);
+    expect(searchedPiece).toBeInstanceOf(Piece);
+    expect(searchedPiece.getId()).toBe(pieceId);
+  });
+
   it('moves a piece', () => {
-    const pieceDTO = new PieceDTO(1,2,3,4);
-    const gameState = GameState.GAME;
-    const gameHandler = new GameHandler([pieceDTO], gameState);
-    const pieceId = gameHandler.pieces[0].id;
-    const startX = gameHandler.pieces[0].x;
-    const startY = gameHandler.pieces[0].y;
+    const gameHandler = new GameHandler();
+    const piece = gameHandler.getPieces()[0];
+    const pieceId = piece.getId();
     const finalX = 10;
     const finalY = 20;
 
-    gameHandler.setPiecePosition(pieceId, finalX, finalY);
+    expect(gameHandler.getPiece(pieceId)).toBeDefined();
 
-    expect(gameHandler.pieces[0].x).toBe(startX + finalX);
-    expect(gameHandler.pieces[0].y).toBe(startY + finalY);
+    gameHandler.setPiecePosition(pieceId, finalX, finalY);
+    expect(gameHandler.getPiece(pieceId).getId()).toBe(pieceId);
+    expect(gameHandler.getPiece(pieceId).getX()).toBe(finalX);
+
+    const { x: resultX, y: resultY } = gameHandler.getPiece(pieceId).getPosition();
+
+    expect(resultX).toBe(finalX);
+    expect(resultY).toBe(finalY);
   });
 
   it('throws an error when trying to move a no existent piece', () => {
@@ -60,10 +76,11 @@ describe('Game Handler tests', () => {
 
   it('rotates pieces', () => {
     const gameHandler = new GameHandler();
-    const pieceId = gameHandler.pieces[0].id;
+    const piece = gameHandler.getPieces()[0]
+    const pieceId = piece.getId();
     const newA = 45;
     gameHandler.setPieceRotation(pieceId, newA);
-    expect(gameHandler.pieces[0].a).toBe(newA);
+    expect(piece.getA()).toBe(newA);
   });
 
   it('throws an error when trying to move a no existent piece', () => {

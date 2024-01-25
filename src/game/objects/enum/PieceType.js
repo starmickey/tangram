@@ -1,5 +1,16 @@
 export default class PieceType {
-  static nextId = 0;
+  #id;
+  #name;
+  #width;
+  #height;
+  /* Used for rounding angle values
+   * It can be less than 360 if the figure can get to two positions
+   * with different rotations and that look like the same.
+   */
+  #maxAngle;
+
+  // Used for generating unique ids
+  static #nextId = 1;
 
   // Default types
   static STRIANGLE = new PieceType("striangle", 100, 100, 360);
@@ -21,23 +32,43 @@ export default class PieceType {
   ];
 
   constructor(name, width = 0, height = 0, maxAngle = 0) {
-    this.id = PieceType.#getNextId();
-    this.name = name;
-    this.width = width;
-    this.height = height;
+    this.#id = PieceType.#getNextId();
+    this.#name = name;
+    this.#width = width;
+    this.#height = height;
     // Angles range is restricted to avoid figures that look
     // the same and have different angles.
-    this.maxAngle = maxAngle;
+    this.#maxAngle = maxAngle;
   }
 
   // Generate unique ids
   static #getNextId() {
-    this.nextId += 1;
-    return this.nextId;
+    this.#nextId += 1;
+    return this.#nextId;
+  }
+
+  getId() {
+    return this.#id;
+  }
+
+  getName() {
+    return this.#name;
+  }
+
+  getWidth() {
+    return this.#width;
+  }
+
+  getHeight() {
+    return this.#height;
+  }
+
+  getMaxAngle() {
+    return this.#maxAngle;
   }
 
   static getPieceType(id) {
-    const filterPieceTypes = PieceType.#defaultTypes.filter((type) => type.id === id);
+    const filterPieceTypes = PieceType.#defaultTypes.filter((type) => type.getId() === id);
 
     // Error handling
     if (filterPieceTypes.length === 0) {
@@ -51,24 +82,12 @@ export default class PieceType {
     return pieceType;
   }
 
-  getMaxAngle() {
-    return this.maxAngle;
+  static getMinSnappingDistance() {
+    return Math.max(
+      PieceType.LTRIANGLE.getWidth(),
+      PieceType.LTRIANGLE.getHeight(),
+    );
   }
 }
 
-// export function getPieceType(id) {
-//   switch (id) {
-//     case PieceType.STRIANGLE.id:
-//       return PieceType.STRIANGLE;
-//     case PieceType.MTRIANGLE.id:
-//       return PieceType.MTRIANGLE;
-//     case PieceType.LTRIANGLE.id:
-//       return PieceType.LTRIANGLE;
-//     case PieceType.PARALLELOGRAM.id:
-//       return PieceType.PARALLELOGRAM;
-//     case PieceType.SQUARE.id:
-//       return PieceType.SQUARE;
-//     default:
-//       throw new Error(`cannot get a piece type for id ${id}`);
-//   }
-// }
+export const { getMinSnappingDistance } = PieceType;

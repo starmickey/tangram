@@ -1,7 +1,19 @@
 import PieceType from "../enum/PieceType";
 
 export default class Piece {
-  static nextId = 1;
+  // Unique identifier of the piece
+  #id;
+  // Piece type. Can be striangle, parallelogram, etc.
+  #type;
+  // X-coordinate of the piece
+  #x;
+  // Y-coordinate of the piece
+  #y;
+  // Piece rotation angle
+  #a;
+
+  // Used for generating unique ids for each piece
+  static #nextId = 1;
 
   /**
    * Create a new Piece object
@@ -24,17 +36,37 @@ export default class Piece {
     }
 
     // Assign attributes
-    this.id = Piece.#getNextId();
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.a = a;
+    this.#id = Piece.#getNextId();
+    this.#type = type;
+    this.#x = x;
+    this.#y = y;
+    this.#a = a;
   }
 
   // Generate unique ids
   static #getNextId() {
-    this.nextId += 1;
-    return this.nextId;
+    this.#nextId += 1;
+    return this.#nextId;
+  }
+
+  getId() {
+    return this.#id;
+  }
+
+  getType() {
+    return this.#type;
+  }
+
+  getX() {
+    return this.#x;
+  }
+
+  getY() {
+    return this.#y;
+  }
+
+  getPosition() {
+    return { x: this.#x, y: this.#y };
   }
 
   /**
@@ -52,8 +84,12 @@ export default class Piece {
     }
 
     // Assign attributes
-    this.x = x;
-    this.y = y;
+    this.#x = x;
+    this.#y = y;
+  }
+
+  getA() {
+    return this.#a;
   }
 
   /**
@@ -70,6 +106,6 @@ export default class Piece {
     }
 
     // Assign attributes
-    this.a = a % this.type.getMaxAngle();
+    this.#a = a % this.#type.getMaxAngle();
   }
 }

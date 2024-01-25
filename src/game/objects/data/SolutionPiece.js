@@ -1,7 +1,19 @@
 import PieceType from "../enum/PieceType";
 
 export default class SolutionPiece {
-  static nextId = 1;
+  // Unique identifier of the solution piece
+  #id;
+  // SolutionPiece type. Can be striangle, parallelogram, etc.
+  #type;
+  // X-coordinate of the solutionPiece
+  #x;
+  // Y-coordinate of the solutionPiece
+  #y;
+  // solutionPiece rotation angle
+  #a;
+
+  // Used for generating unique ids for each solutionPiece
+  static #nextId = 1;
 
   /**
    * Position of the piece when the puzzle is solved
@@ -23,16 +35,39 @@ export default class SolutionPiece {
     }
 
     // Assign attributes
-    this.id = SolutionPiece.#getNextId();
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.a = a;
+    this.#id = SolutionPiece.#getNextId();
+    this.#type = type;
+    this.#x = x;
+    this.#y = y;
+    this.#a = a;
   }
 
   // Generate unique ids
   static #getNextId() {
-    this.nextId += 1;
-    return this.nextId;
+    this.#nextId += 1;
+    return this.#nextId;
+  }
+
+  getId() {
+    return this.#id;
+  }
+
+  getType() {
+    return this.#type;
+  }
+
+  getX() {
+    return this.#x;
+  }
+  getY() {
+    return this.#y;
+  }
+
+  getPosition() {
+    return { x: this.#x, y: this.#y };
+  }
+
+  getA() {
+    return this.#a;
   }
 }

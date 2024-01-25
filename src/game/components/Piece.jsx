@@ -65,27 +65,27 @@ function Piece({
       // Draw the piece
       sceneFunc={(context, shape) => {
         const corners = getCorners(
-          piece.typeId,
-          piece.width,
-          piece.height,
+          piece.getTypeId(),
+          piece.getWidth(),
+          piece.getHeight(),
         );
         const lastCorner = corners[corners.length - 1];
         context.beginPath();
-        context.moveTo(lastCorner.x, lastCorner.y);
+        context.moveTo(lastCorner.getX(), lastCorner.getY());
         corners.forEach((c) => {
-          const { x, y } = c;
+          const { x, y } = c.getPosition();
           context.lineTo(x, y);
         });
         context.closePath();
         context.fillStrokeShape(shape);
       }}
       // position
-      x={piece.x}
-      y={piece.y}
-      rotation={piece.a}
+      x={piece.getX()}
+      y={piece.getY()}
+      rotation={piece.getA()}
       // dimensions
-      width={piece.width}
-      height={piece.height}
+      width={piece.getWidth()}
+      height={piece.getHeight()}
       // events handling
       draggable
       onDragStart={handleDragStart}
@@ -97,8 +97,8 @@ function Piece({
       stroke={styles.stroke}
       strokeWidth={styles.strokeWidth}
       // ensure it rotates around its center
-      offsetX={piece.width / 2}
-      offsetY={piece.height / 2}
+      offsetX={piece.getWidth() / 2}
+      offsetY={piece.getHeight() / 2}
       // shadow
       shadowOffsetX={
         isDragging
