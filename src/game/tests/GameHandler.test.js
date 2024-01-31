@@ -14,10 +14,13 @@ describe('Game Handler tests', () => {
 
   it('gets a piece DTO', () => {
     const gameHandler = new GameHandler();
-    const pieceId = gameHandler.getPieces()[0].getId();
-    const pieceReturned = gameHandler.getPieceDTO(pieceId);
+    const piece = gameHandler.getPieces()[0];
+    const pieceReturned = gameHandler.getPieceDTO(piece.getId());
     expect(pieceReturned).toBeDefined();
     expect(pieceReturned).toBeInstanceOf(PieceDTO);
+    expect(pieceReturned.getId()).toBe(piece.getId());
+    expect(pieceReturned.getPosition()).toStrictEqual(piece.getPosition());
+    expect(pieceReturned.getTypeId()).toBe(piece.getType().getId());
   });
 
   it('throws error when trying to get a pieceDTO for a no existent piece', () => {

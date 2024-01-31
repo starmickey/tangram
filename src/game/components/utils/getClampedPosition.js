@@ -1,6 +1,3 @@
-import PieceDTO from "../../objects/dto/PieceDTO";
-import SolutionDTO from "../../objects/dto/SolutionDTO";
-
 /**
  * Clamps the position within the specified container boundaries.
  * @param {number} x - X-coordinate of the position.
@@ -12,7 +9,7 @@ import SolutionDTO from "../../objects/dto/SolutionDTO";
  * @returns {Object} - Clamped position {x, y}.
  * @throws {Error} If input parameters are invalid.
  */
-export function getClampedPosition(
+export default function getClampedPosition(
   x,
   y,
   targetWidth,
@@ -89,55 +86,4 @@ export function getRandomPosition(
 
   const { x, y } = clampedPosition;
   return { x, y };
-}
-
-/**
- * Determines if two points are close enough to snap
- * them together.
- * @param {number} x1 - X coordinate of the first point.
- * @param {number} y1 - Y coordinate of the first point.
- * @param {number} x2 - X coordinate of the second point.
- * @param {number} y2 - Y coordinate of the second point.
- * @returns {boolean} - True if the points are close enough to snap, false otherwise.
- */
-function arePointsCloseToSnap(x1, y1, x2, y2) {
-  const dx = x1 - x2;
-  const dy = y1 - y2;
-  const sqrdist = dx ** 2 + dy ** 2;
-
-  const MAX_DISTANCE = 500;
-  return sqrdist < MAX_DISTANCE;
-}
-
-/**
- * Determines if a piece is snappable to a solution piece hole.
- * @param {PieceDTO} pieceDTO - Data of the piece to snap.
- * @param {SolutionDTO} solutionDTO - keeps all the solution pieces
- * to compare the pieceDTO to their positions.
- * @returns {SolutionPieceDTO | null} - Returns the SolutionPieceDTO if snappable,
- * otherwise returns null.
- * @throws {Error} If input parameters are not instances of PieceDTO and SolutionDTO.
- */
-export function getSolutionPieceToSnap(pieceDTO, solutionDTO) {
-  // Input validation
-  if (!(pieceDTO instanceof PieceDTO)) {
-    throw new Error("piece must be an instance of PieceDTO");
-  }
-  if (!(solutionDTO instanceof SolutionDTO)) {
-    throw new Error("solution must be an instance of SolutionDTO");
-  }
-
-  // Find the snappable piece
-  const snappablePiece = solutionDTO.getPieces().find((sp) => (
-    sp.getTypeId() === pieceDTO.getTypeId()
-    && sp.getA() === pieceDTO.getA()
-    && arePointsCloseToSnap(
-      sp.getX(),
-      sp.getY(),
-      pieceDTO.getX(),
-      pieceDTO.getY(),
-    )
-  ));
-
-  return snappablePiece || null;
 }

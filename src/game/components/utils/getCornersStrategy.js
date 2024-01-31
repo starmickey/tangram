@@ -1,5 +1,5 @@
 import PieceType from "../../objects/enum/PieceType";
-import CornerDTO from "./CornerDTO";
+import CornerDTO from "../../objects/ui/CornerDTO";
 
 /**
  * If the piece is rotated, modifies the coordinates

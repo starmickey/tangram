@@ -5,7 +5,7 @@ import Piece from "./Piece";
 import Solution from "./Solution";
 import GameHandler from "../controllers/GameHandler";
 import { StageDimensionsCtx } from "../contexts/StageContext";
-import { getRandomPosition } from "./utils/pieceMovement";
+import { getRandomPosition } from "./utils/getClampedPosition";
 import "../styles/game.css";
 
 /**

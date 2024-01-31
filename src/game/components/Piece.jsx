@@ -5,6 +5,7 @@ import GameHandler from "../controllers/GameHandler";
 import { useScaleState } from "../contexts/StageContext";
 import useDragAndClick from "./utils/useDragAndClick";
 import getCorners from "./utils/getCornersStrategy";
+import PieceSnapper from "./utils/PieceSnapper";
 
 /**
  * Renders an interactive piece component.
@@ -26,11 +27,51 @@ function Piece({
   // Get actual piece state from Game Handler
   const pieceDTO = gameHandler.getPieceDTO(pieceId);
   // Create a status hook for the GameHandler piece state
-  const [piece, setPiece] = useState(pieceDTO);
+  const [piece, setPiece] = useState({
+    typeId: pieceDTO.getTypeId(),
+    x: pieceDTO.getX(),
+    y: pieceDTO.getY(),
+    a: pieceDTO.getA(),
+    width: pieceDTO.getWidth(),
+    height: pieceDTO.getHeight(),
+  });
   // Create a piece reference for the react konva piece shape component
   const pieceRef = useRef();
 
-  // Get scale from context
+  // Piece management functions
+  const getPieceRect = () => pieceRef.current.getClientRect();
+
+  const getPiecePosition = () => ({
+    x: pieceRef.current.x(),
+    y: pieceRef.current.y(),
+    a: pieceRef.current.rotation(),
+  });
+
+  const getPieceTypeId = () => (piece.typeId);
+
+  const setPiecePosition = (x, y, a) => {
+    // Update piece position
+    setPiece({
+      ...piece, x, y, a,
+    });
+    // Update controller
+    gameHandler.setPiecePosition(pieceId, x, y);
+    gameHandler.setPieceRotation(pieceId, a);
+    // Check if game was solved
+    if (gameHandler.isGameSolved()) {
+      // If so, rerender the page
+      handleGameSolved();
+    }
+  };
+
+  const getPieceSnapper = () => (PieceSnapper.getFromPieceAndSolutionDTO(
+    gameHandler.getPiecesDTOs(),
+    gameHandler.getSolutionDTO(),
+  ));
+
+  const markPieceAsSolved = () => (gameHandler.markPieceAsSolved(pieceId));
+
+  // Get context for piece styling
   const scale = useScaleState();
 
   // Get events handlers
@@ -41,11 +82,12 @@ function Piece({
     handleDragEnd,
     handleClick,
   } = useDragAndClick(
-    pieceId,
-    pieceRef,
-    setPiece,
-    gameHandler,
-    handleGameSolved,
+    getPieceRect,
+    getPiecePosition,
+    setPiecePosition,
+    getPieceSnapper,
+    getPieceTypeId,
+    markPieceAsSolved,
   );
 
   // Create custom styles
@@ -65,13 +107,13 @@ function Piece({
       // Draw the piece
       sceneFunc={(context, shape) => {
         const corners = getCorners(
-          piece.getTypeId(),
-          piece.getWidth(),
-          piece.getHeight(),
+          piece.typeId,
+          piece.width,
+          piece.height,
         );
         const lastCorner = corners[corners.length - 1];
         context.beginPath();
-        context.moveTo(lastCorner.getX(), lastCorner.getY());
+        context.moveTo(lastCorner.x, lastCorner.y);
         corners.forEach((c) => {
           const { x, y } = c.getPosition();
           context.lineTo(x, y);
@@ -80,12 +122,12 @@ function Piece({
         context.fillStrokeShape(shape);
       }}
       // position
-      x={piece.getX()}
-      y={piece.getY()}
-      rotation={piece.getA()}
+      x={piece.x}
+      y={piece.y}
+      rotation={piece.a}
       // dimensions
-      width={piece.getWidth()}
-      height={piece.getHeight()}
+      width={piece.width}
+      height={piece.height}
       // events handling
       draggable
       onDragStart={handleDragStart}
@@ -97,8 +139,8 @@ function Piece({
       stroke={styles.stroke}
       strokeWidth={styles.strokeWidth}
       // ensure it rotates around its center
-      offsetX={piece.getWidth() / 2}
-      offsetY={piece.getHeight() / 2}
+      offsetX={piece.width / 2}
+      offsetY={piece.height / 2}
       // shadow
       shadowOffsetX={
         isDragging
@@ -131,10 +173,14 @@ function Piece({
   );
 }
 
+Piece.defaultProps = {
+  handleGameSolved: () => {},
+};
+
 Piece.propTypes = {
   pieceId: PropTypes.number.isRequired,
   gameHandler: PropTypes.instanceOf(GameHandler).isRequired,
-  handleGameSolved: PropTypes.func.isRequired,
+  handleGameSolved: PropTypes.func,
 };
 
 export default Piece;
