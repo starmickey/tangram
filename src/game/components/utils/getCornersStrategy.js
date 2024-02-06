@@ -120,6 +120,7 @@ function getParallelogramCorners(width, height, x, y, a) {
  * @returns {Array} - array of CornerDTO with corners
  */
 export default function getCorners(typeId, width, height, x = 0, y = 0, a = 0) {
+  // Validate inputs
   if (
     typeof typeId !== "number"
     || typeof width !== "number"

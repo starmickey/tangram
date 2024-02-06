@@ -84,10 +84,27 @@ export default class SolutionHandler {
   /**
    * Marks a solution piece as solved by adding its id to the solvedIds array.
    * @param {number} id - SolutionPiece id.
+   * @param {boolean} isSolved - True if the piece is placed over its solution,
+   * and so, is solved.
    * @throws {Error} If the solution piece with the provided id is not found or
-   * if multiple pieces are found.
+   * if multiple pieces are found or arguments are invalid
    */
-  markPieceAsSolved(id) {
+  setPieceIsSolved(id, isSolved) {
+    // Validate inputs
+    if (
+      typeof id !== "number"
+      || typeof isSolved !== "boolean"
+    ) {
+      throw new Error("a number and a boolean must be provided as arguments.");
+    }
+
+    // In case that piece was moved out of the solution hole
+    if (!isSolved) {
+      // Remove id from list
+      this.#solvedIds = this.#solvedIds.filter((i) => i !== id);
+      return;
+    }
+
     // Check if id is already in solvedIds array
     const filteredSolvedIds = this.#solvedIds.filter((si) => si === id);
 

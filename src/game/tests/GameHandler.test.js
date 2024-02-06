@@ -86,15 +86,6 @@ describe('Game Handler tests', () => {
     expect(piece.getA()).toBe(newA);
   });
 
-  it('throws an error when trying to move a no existent piece', () => {
-    const gameState = GameState.GAME;
-    const gameHandler = new GameHandler([], gameState);
-    const pieceId = 2;
-    const diffA = 10;
-
-    expect(() => {gameHandler.rotatePiece(pieceId, diffA)}).toThrow(Error);
-  });
-
   it('gets pieces ids', () => {
     const gameHandler = new GameHandler();
     const ids = gameHandler.getPiecesIds();

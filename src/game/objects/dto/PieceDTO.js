@@ -62,6 +62,7 @@ export default class PieceDTO {
   getX() {
     return this.#x;
   }
+
   getY() {
     return this.#y;
   }

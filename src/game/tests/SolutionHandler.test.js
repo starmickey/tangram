@@ -29,7 +29,7 @@ describe('Solution Handler', () => {
     const solution = new Solution(pieces);
     const solutionStatus = new SolutionHandler(solution);
 
-    solutionStatus.markPieceAsSolved(sp1.getId());
+    solutionStatus.setPieceIsSolved(sp1.getId(), true);
     expect(solutionStatus.getSolvedIds()).toContain(sp1.getId());
   });
 
@@ -39,10 +39,22 @@ describe('Solution Handler', () => {
     const solution = new Solution(pieces);
     const solutionStatus = new SolutionHandler(solution);
 
-    solutionStatus.markPieceAsSolved(sp1.getId());
-    solutionStatus.markPieceAsSolved(sp1.getId());
+    solutionStatus.setPieceIsSolved(sp1.getId(), true);
+    solutionStatus.setPieceIsSolved(sp1.getId(), true);
     expect(solutionStatus.getSolvedIds().length).toBe(1);
   });
+
+  it('marks a piece as unsolved', () => {
+    const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);
+    const pieces = [sp1];
+    const solution = new Solution(pieces);
+    const solutionStatus = new SolutionHandler(solution);
+
+    const id = sp1.getId();
+    solutionStatus.setPieceIsSolved(id, true);
+    solutionStatus.setPieceIsSolved(id, false);
+    expect(solutionStatus.getSolvedIds()).not.toContain(id);
+  })
 
   it('throws error if trying to mark a piece as solved that isnt in the solution', () => {
     const sp1 = new SolutionPiece(PieceType.LTRIANGLE, 10, 10, 0);

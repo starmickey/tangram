@@ -13,8 +13,8 @@ class GameHandler {
   // Keeps up to date positions of the interactive pieces
   #pieces;
 
-  constructor() {
-    this.#solutionHandler = new SolutionHandler();
+  constructor(solutionHandler = new SolutionHandler()) {
+    this.#solutionHandler = solutionHandler;
     // Get the pieces of the solution generated
     const solution = this.#solutionHandler.getSolution();
     const solutionPieces = solution.getPieces();
@@ -155,9 +155,11 @@ class GameHandler {
    * Tell gameHandler that a piece is been placed in the position
    * of the solution.
    * @param {number} pieceId - Unique identifier of the piece
+   * @param {boolean} isSolved - True if the piece is placed over its solution,
+   * and so, is solved.
    */
-  markPieceAsSolved(pieceId) {
-    this.#solutionHandler.markPieceAsSolved(pieceId);
+  setPieceIsSolved(pieceId, isSolved) {
+    this.#solutionHandler.setPieceIsSolved(pieceId, isSolved);
   }
 
   /**
